@@ -7,15 +7,19 @@ public class News {
     private Integer id;
     private String title;
     private String imgurl;
-    private String content;
+    private String url;
 
-    public News(Integer id, String title, String imgurl, String content) {
+    public News(Integer id, String title, String imgurl) {
         this.id = id;
         this.title = title;
         this.imgurl = imgurl;
-        this.content = content;
     }
-
+    public News( String title, String imgurl,String url) {
+        this.id = 0;
+        this.title = title;
+        this.imgurl = imgurl;
+        this.url = url;
+    }
     public Integer getId() {
         return id;
     }
@@ -40,25 +44,34 @@ public class News {
         this.imgurl = imgurl;
     }
 
-    public String getContent() {
-        return content;
+    public String getTitle() {
+        return title;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setTitle(String title) {
+        this.title = title;
     }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public static List<News> getTestData() {
         List<News> list = new ArrayList<>();
-        list.add(new News(1,"博物馆之夜1","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg","xxxx"));
-        list.add(new News(2,"博物馆之夜2","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg","xxxx"));
-        list.add(new News(3,"博物馆之夜3","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg","xxxx"));
-        list.add(new News(4,"博物馆之夜4","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg","xxxx"));
-        list.add(new News(5,"博物馆之夜5","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg","xxxx"));
-        list.add(new News(6,"博物馆之夜6","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg","xxxx"));
-        list.add(new News(7,"博物馆之夜7","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg","xxxx"));
-        list.add(new News(8,"博物馆之夜8","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg","xxxx"));
-        list.add(new News(9,"博物馆之夜9","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg","xxxx"));
-        list.add(new News(10,"博物馆之夜10","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg","xxxx"));
+        list.add(new News(1,"博物馆之夜1","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
+        list.add(new News(2,"博物馆之夜2","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
+        list.add(new News(3,"博物馆之夜3","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
+        list.add(new News(4,"博物馆之夜4","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
+        list.add(new News(5,"博物馆之夜5","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
+        list.add(new News(6,"博物馆之夜6","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
+        list.add(new News(7,"博物馆之夜7","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
+        list.add(new News(8,"博物馆之夜8","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
+        list.add(new News(9,"博物馆之夜9","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
+        list.add(new News(10,"博物馆之夜10","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
 
         return list;
 

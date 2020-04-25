@@ -1,43 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".ui.first.FirstFragment">-->
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:background="#ffffff"-->
-<!--        android:scrollbars="none">-->
 
-<!--        <TextView-->
-<!--            android:id="@+id/text_firstTitle"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_above="@+id/indicator"-->
-<!--            android:layout_toLeftOf="@id/indicator"-->
-<!--            android:gravity="center"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:text="下拉刷新重新设置数据数据，点击按钮改变使用场景" />-->
-
-<!--        <com.youth.banner.Banner xmlns:banner="http://schemas.android.com/apk/res-auto"-->
-<!--            android:id="@+id/banner"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="180dp"-->
-<!--            android:layout_margin="10dp"-->
-<!--            banner:indicator_normal_color="@android:color/white"-->
-<!--            banner:indicator_selected_color="@color/colorPrimary" />-->
-
-<!--        <com.youth.banner.indicator.RoundLinesIndicator-->
-<!--            android:id="@+id/indicator"-->
-<!--            android:layout_below="@+id/banner"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="20dp"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:visibility="gone"/>-->
-<!--    </RelativeLayout>-->
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
 <LinearLayout xmlns:banner="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -78,12 +40,17 @@
         android:layout_width="match_parent"
         android:layout_height="21dp" />
 
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_firstview"
         android:layout_width="370dp"
         android:layout_height="504dp"
         android:layout_gravity="center_horizontal" />
-
 
 
 </LinearLayout>

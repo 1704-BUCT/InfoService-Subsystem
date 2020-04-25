@@ -8,16 +8,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.museum.Adapter.MuseumAdapter;
-import com.example.museum.Datas.Museum;
+
 
 
 public class MuseumActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +27,20 @@ public class MuseumActivity extends AppCompatActivity {
         if (actionbar != null) {
             actionbar.hide();
         }
+
         SearchView searchView = (SearchView)findViewById(R.id.search_museum);
-        searchView.setIconified(false);
+
+        searchView.setIconified(false);         //展开搜索得内容
         searchView.setSubmitButtonEnabled(true);//显示提交按钮
-        searchView.onActionViewExpanded();// 当展开无输入内容的时候，没有关闭的图标
+        searchView.onActionViewExpanded();      //当展开无输入内容的时候，没有关闭的图标
         searchView.setIconifiedByDefault(false);//默认为true在框内，设置false则在框外
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //提交按钮的点击事件
-//                Toast.makeText(MuseumActivity.this, query, Toast.LENGTH_SHORT).show();
+                //提交按钮的点击事件，这里应该是根据query即博物馆名称作为关键字进行查询
+                //此处需要第五小组的api,需要把博物馆的信息存到museum对象中，再作为参数传递给博物馆具体信息页面
+
+                searchView.clearFocus();  //可以收起键盘
                 return true;
             }
 

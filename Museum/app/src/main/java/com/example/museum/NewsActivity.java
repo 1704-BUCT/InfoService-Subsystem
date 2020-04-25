@@ -2,10 +2,15 @@ package com.example.museum;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.just.agentweb.AgentWeb;
 
 public class NewsActivity  extends AppCompatActivity {
     @Override
@@ -18,8 +23,17 @@ public class NewsActivity  extends AppCompatActivity {
             actionbar.hide();
         }
         Intent intent=getIntent();
-        Integer id=intent.getIntExtra("Index",0);
-        TextView text=findViewById(R.id.text_newsTitle);
-        text.setText(id.toString());
+        String URL=intent.getStringExtra("Url");
+        LinearLayout view=findViewById(R.id.web_view);
+
+//        webView.getSettings().setJavaScriptEnabled(true);
+//        webView.setWebViewClient(new WebViewClient());
+//        webView.loadUrl("https://baijiahao.baidu.com/s?id=1664479836390504132&wfr=spider&for=pc");
+        AgentWeb mAgentWeb = AgentWeb.with(this)
+                .setAgentWebParent((LinearLayout) view, new LinearLayout.LayoutParams(-1, -1))
+                .useDefaultIndicator()
+                .createAgentWeb()
+                .ready()
+                .go("https://baijiahao.baidu.com/s?id=1664479836390504132&wfr=spider&for=pc");
     }
 }

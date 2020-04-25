@@ -9,7 +9,7 @@
 
 <!--    <Space-->
 <!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="13dp" />-->
+<!--        android:layout_height="100dp" />-->
 
     <SearchView
         android:id="@+id/search_museum"
@@ -19,13 +19,13 @@
         android:background="@drawable/border"
         android:queryHint="博物馆名称"
         android:visibility="visible" />
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<!--    <androidx.coordinatorlayout.widget.CoordinatorLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_museumsviews"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+<!--    </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
 </LinearLayout>
