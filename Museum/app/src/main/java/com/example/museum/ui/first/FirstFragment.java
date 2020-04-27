@@ -51,7 +51,7 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
     private LinearLayoutManager layoutManager;
     private ProgressBar progressBar;
     private NewsAdapter adapter;
-    //防止在子线程中更新UI时程序会崩溃
+    //防止在子线程中更新UI时程序会崩溃，添加了Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         @Override
@@ -88,11 +88,18 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
         banner.addOnPageChangeListener(this);
         //圆角
         banner.setBannerRound(BannerUtils.dp2px(5));
+
         recyclerView = (RecyclerView)root.findViewById(R.id.recycler_firstview);
         layoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(layoutManager);
+        //为RecyclerView添加分割线
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                getContext(),DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
         List<News> newsList = new ArrayList<>();
         new Thread(()->{
+//            String url = "https://www.baidu.com";
             String url = "http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811";
             OkHttpClient okHttpClient = new OkHttpClient();
             Request request = new Request.Builder()
@@ -116,12 +123,6 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
             }catch(IOException | JSONException e){
                 e.printStackTrace();
             }}).start();
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
-                getContext(),DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
-        
         return root;
     }
 

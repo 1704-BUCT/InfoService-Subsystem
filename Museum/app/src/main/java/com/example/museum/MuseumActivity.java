@@ -29,7 +29,6 @@ public class MuseumActivity extends AppCompatActivity {
         }
 
         SearchView searchView = (SearchView)findViewById(R.id.search_museum);
-
         searchView.setIconified(false);         //展开搜索得内容
         searchView.setSubmitButtonEnabled(true);//显示提交按钮
         searchView.onActionViewExpanded();      //当展开无输入内容的时候，没有关闭的图标
@@ -39,7 +38,6 @@ public class MuseumActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 //提交按钮的点击事件，这里应该是根据query即博物馆名称作为关键字进行查询
                 //此处需要第五小组的api,需要把博物馆的信息存到museum对象中，再作为参数传递给博物馆具体信息页面
-
                 searchView.clearFocus();  //可以收起键盘
                 return true;
             }

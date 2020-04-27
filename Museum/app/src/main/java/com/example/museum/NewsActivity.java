@@ -25,7 +25,6 @@ public class NewsActivity  extends AppCompatActivity {
         Intent intent=getIntent();
         String URL=intent.getStringExtra("Url");
         LinearLayout view=findViewById(R.id.web_view);
-
 //        webView.getSettings().setJavaScriptEnabled(true);
 //        webView.setWebViewClient(new WebViewClient());
 //        webView.loadUrl("https://baijiahao.baidu.com/s?id=1664479836390504132&wfr=spider&for=pc");
@@ -34,6 +33,6 @@ public class NewsActivity  extends AppCompatActivity {
                 .useDefaultIndicator()
                 .createAgentWeb()
                 .ready()
-                .go("https://baijiahao.baidu.com/s?id=1664479836390504132&wfr=spider&for=pc");
+                .go(URL);
     }
 }

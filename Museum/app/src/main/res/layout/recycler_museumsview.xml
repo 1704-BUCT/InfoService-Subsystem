@@ -19,14 +19,41 @@
             android:layout_gravity="center_horizontal"
             android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/museum_name"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textAlignment="center"
-            android:layout_margin="5dp"
-            android:textSize="16sp" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/museum_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:text="博物馆"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+            <Space
+                android:layout_width="17dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <com.kaelli.niceratingbar.NiceRatingBar
+                android:id="@+id/show_RatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                app:nrb_rating="1.1"
+                app:nrb_ratingStatus="Disable"
+                app:nrb_starEmptyResource="@drawable/ic_star_border_black_16dp"
+                app:nrb_starFullResource="@drawable/ic_star_black_16dp"
+                app:nrb_starHalfResource="@drawable/ic_star_half_black_16dp"
+                app:nrb_starImageHeight="16dp"
+                app:nrb_starImagePadding="2dp"
+                app:nrb_starImageWidth="16dp"
+                app:nrb_starTotal="5" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
