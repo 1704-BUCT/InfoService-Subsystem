@@ -3,8 +3,8 @@
     <!--    <string name="title_home">Home</string>-->
     <!--    <string name="title_dashboard">Dashboard</string>-->
     <!--    <string name="title_notifications">Notifications</string>-->
-    <string name="title_first">精选</string>
-    <string name="title_finding">发现</string>
-    <string name="title_guide">导览</string>
-    <string name="title_my">我的</string>
+    <string name="nav_item1">精选</string>
+    <string name="nav_item2">发现</string>
+    <string name="nav_item3">导览</string>
+    <string name="nav_item4">我的</string>
 </resources>

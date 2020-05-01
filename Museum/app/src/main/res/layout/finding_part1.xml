@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--发现页面内的展览部分-->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    app:contentPaddingRight="10dp"
+    app:contentPaddingLeft="25dp"
+    app:contentPaddingTop="15dp"
+    app:contentPaddingBottom="25dp">
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="35dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/shape_rect"
+                android:layout_gravity="center_vertical"/>
+
+            <Space
+                android:layout_width="11dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="展览"
+                android:textSize="20sp"/>
+
+            <Space
+                android:layout_width="228dp"
+                android:layout_height="match_parent"
+                 />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/part_more1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="更多"
+                android:textSize="17sp"/>
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_forward"
+                android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_findingpart1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

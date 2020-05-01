@@ -3,6 +3,10 @@ package com.example.museum.Datas;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/*
+* 定义新闻类，存放一个的新闻的相关信息
+* */
 public class News {
     private Integer id;
     private String title;
@@ -72,8 +76,6 @@ public class News {
         list.add(new News(8,"博物馆之夜8","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
         list.add(new News(9,"博物馆之夜9","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
         list.add(new News(10,"博物馆之夜10","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
-
         return list;
-
     }
 }

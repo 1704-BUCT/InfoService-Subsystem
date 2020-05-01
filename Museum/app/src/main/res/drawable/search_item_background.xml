@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--搜索框的样式-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#F8F8F8">
+    </solid>
+    <stroke
+        android:width="0.05dp"
+        android:color="#8A8888" />
+    <corners android:radius="40dp"/>
+    <padding
+        android:bottom="2dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="2dp"/>
+</shape>

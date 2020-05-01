@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--定义了四个导航路径及其对应的布局文件-->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_first">           <!--    决定首页是哪个页面-->
-
+    app:startDestination="@+id/navigation_finding">           <!--    决定首页是哪个页面-->
 
     <fragment
         android:id="@+id/navigation_first"
-        android:name="com.example.museum.ui.first.FirstFragment"
-        android:label="@string/title_first"
+        android:name="com.example.museum.UI.first.FirstFragment"
+        android:label="@string/nav_item1"
         tools:layout="@layout/fragment_firstpage" />
 
     <fragment
         android:id="@+id/navigation_finding"
-        android:name="com.example.museum.ui.finding.FindingFragment"
-        android:label="@string/title_finding"
+        android:name="com.example.museum.UI.finding.FindingFragment"
+        android:label="@string/nav_item2"
         tools:layout="@layout/fragment_findingpage" />
-<!--    <fragment-->
-<!--        android:id="@+id/navigation_dashboard"-->
-<!--        android:name="com.example.museum.ui.dashboard.DashboardFragment"-->
-<!--        android:label="@string/title_finding"-->
-<!--        tools:layout="@layout/fragment_dashboard" />-->
+
     <fragment
         android:id="@+id/navigation_guide"
-        android:name="com.example.museum.ui.guide.GuideFragment"
-        android:label="@string/title_guide"
+        android:name="com.example.museum.UI.guide.GuideFragment"
+        android:label="@string/nav_item3"
         tools:layout="@layout/fragment_gudiepage" />
 
     <fragment
         android:id="@+id/navigation_my"
-        android:name="com.example.museum.ui.my.MyFragment"
-        android:label="@string/title_my"
+        android:name="com.example.museum.UI.my.MyFragment"
+        android:label="@string/nav_item4"
         tools:layout="@layout/fragment_mypage" />
 </navigation>

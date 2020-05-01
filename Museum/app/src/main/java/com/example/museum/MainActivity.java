@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -15,9 +14,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+
+/*
+    MuseumApp的入口，设置了底部导航栏的一些属性
+*/
 public class MainActivity extends AppCompatActivity {
 
-    //在网上找的是导航栏底部项目>3时，图标和文字仍能同时显示的方法
+    //导航栏底部项目>3时，图标和文字仍能同时显示的方法
     @SuppressLint({"RestrictedApi", "WrongConstant"})
     public static void disableShiftMode(BottomNavigationView view) {
         int count = view.getChildCount();
@@ -34,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActionBar actionbar = getSupportActionBar();
         // 隐藏标题栏
-        if (actionbar != null) {
-            actionbar.hide();
-        }
+//        ActionBar actionbar = getSupportActionBar();
+//        if (actionbar != null) {
+//            actionbar.hide();
+//        }
         BottomNavigationView navView = findViewById(R.id.nav_view);
         disableShiftMode(navView);
 
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_first, R.id.navigation_finding, R.id.navigation_guide,R.id.navigation_my)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
 

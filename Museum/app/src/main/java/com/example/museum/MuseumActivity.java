@@ -2,75 +2,110 @@ package com.example.museum;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.viewpager.widget.ViewPager;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
-import android.widget.SearchView;
+import com.bumptech.glide.Glide;
+import com.example.museum.Adapter.CusFragment;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
+import com.zhengsr.tablib.view.adapter.TabFlowAdapter;
+import com.zhengsr.tablib.view.flow.TabFlowLayout;
 
-import com.example.museum.Adapter.MuseumAdapter;
-
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MuseumActivity extends AppCompatActivity {
 
-
+    private List<Fragment> mFragments = new ArrayList<>();
+    private List<String> mTitle = new ArrayList<>(Arrays.asList("展览 藏品 教育活动 新闻 评论".split(" ")));
+    private ViewPager mViewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_museum);
-        ActionBar actionbar = getSupportActionBar();
-        // 隐藏标题栏
-        if (actionbar != null) {
-            actionbar.hide();
+        //显示博物馆图片
+        ImageView imageView = (ImageView)findViewById(R.id.Appbar_imageview);
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.collapsing_bar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        SearchView searchView = (SearchView)findViewById(R.id.search_museum);
-        searchView.setIconified(false);         //展开搜索得内容
-        searchView.setSubmitButtonEnabled(true);//显示提交按钮
-        searchView.onActionViewExpanded();      //当展开无输入内容的时候，没有关闭的图标
-        searchView.setIconifiedByDefault(false);//默认为true在框内，设置false则在框外
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        // 给ToolBar上的返回键添加销毁活动的动作
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                //提交按钮的点击事件，这里应该是根据query即博物馆名称作为关键字进行查询
-                //此处需要第五小组的api,需要把博物馆的信息存到museum对象中，再作为参数传递给博物馆具体信息页面
-                searchView.clearFocus();  //可以收起键盘
-                return true;
+            public void onClick(View v) {
+                finish();
             }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-                //当输入框内容改变的时候回调
-//                Log.i(TAG,"内容: " + newText);
-//                return true;
-//            }
         });
-        //去掉搜索框的下划线
-        View viewById1 = searchView.findViewById(searchView.getContext().getResources().getIdentifier("android:id/search_plate",null,null));
-        if (viewById1 != null) {
-            viewById1.setBackgroundColor(Color.TRANSPARENT);
-        }
-        //去掉提交箭头下面的下划线
-        View viewById2 = searchView.findViewById(searchView.getContext().getResources().getIdentifier("android:id/submit_area",null,null));
-        if (viewById2 != null) {
-            viewById2.setBackgroundColor(Color.TRANSPARENT);
-        }
 
-        //卡片式布局显示博物馆
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_museumsviews);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
-        recyclerView.setLayoutManager(layoutManager);
-        MuseumAdapter adapter= new MuseumAdapter();
-        recyclerView.setAdapter(adapter);
+        collapsingToolbarLayout.setTitle("故宫博物馆");
+        collapsingToolbarLayout.setStatusBarScrimColor(getResources().getColor(R.color.colorPrimaryDark1));
+        Glide.with(this).load(R.drawable.museum_appbar_head).into(imageView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setSmoothScrollbarEnabled(true);
+        //显示博物馆的具体介绍（用可折叠的文本框）
+        ExpandableTextView museumdetails = (ExpandableTextView)findViewById(R.id.expand_text_view);
+        museumdetails.setText("北京故宫博物院建立于1925年10月10日，位于北京故宫紫禁城内。是在明朝、清朝两代皇宫机器收藏的基础上建立起来的中国性综合博物馆，也是中国最大的古代文化艺术博物馆，其文物收藏主要来源于清代宫中旧藏，是第一批全国爱国主义教育示范基地。从2014年1月1日起，北京故宫博物院几乎每周一闭馆。\n" +
+                "北京故宫博物院位于北京故宫即紫禁城内。北京故宫是第一批全国重点文物保护单位、第一批国家5A级旅游景区、全国未成年人道德建设思想工作先进单位，1987年入选《世界文化遗产名录》。\n" +
+                "2018年10月，故宫博物院发布首款主体功能游戏和首张古画主题音乐专辑，拉开“智慧故宫”序幕。\n");
 
+        mViewPager = findViewById(R.id.viewpager);
+        for (String s : mTitle) {
+            mFragments.add(CusFragment.newInStance(s));
+        }
+        mViewPager.setAdapter(new CusAdapter(getSupportFragmentManager()));
+        mViewPager.setOffscreenPageLimit(5);     //好像是限制viewpager中fragment的个数
+        rectFlow();
     }
+
+    // 设置博物馆具体信息页面Tab布局的格式和内容（用来显示展览、藏品、教育活动、新闻、评论）
+    private void rectFlow(){
+        TabFlowLayout flowLayout = findViewById(R.id.rectflow);
+        //设置tabbar的内容及格式（包括选中颜色和未选中颜色）
+        flowLayout.setViewPager(mViewPager)
+                .setTextId(R.id.item_text)
+                .setSelectedColor(getResources().getColor(R.color.select))
+                .setUnSelectedColor(getResources().getColor(R.color.unselect));
+        flowLayout.setAdapter(new TabFlowAdapter<String>(R.layout.item_msg,mTitle) {
+            @Override
+            public void bindView(View view, String data, int position) {
+                setText(view,R.id.item_text,data);
+            }
+            @Override
+            public void onItemClick(View view, String data, int position) {
+                super.onItemClick(view, data, position);
+                mViewPager.setCurrentItem(position);
+            }
+        });
+    }
+
+    class CusAdapter extends FragmentPagerAdapter {
+        public CusAdapter(FragmentManager fm) {
+            super(fm);
+        }
+        @Override
+        public Fragment getItem(int position) {
+            return mFragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragments.size();
+        }
+    }
+
+
 }

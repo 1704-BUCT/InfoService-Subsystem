@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--发现页面的布局文件-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
     android:orientation="vertical"
     android:scrollbars="none"
-    tools:context=".ui.first.FirstFragment">
+    tools:context=".UI.first.FirstFragment">
 
     <TextView
         android:id="@+id/text_findingTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
-        android:text="发现"
+        android:text="@string/nav_item2"
         android:textColor="@color/textTitle"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -23,10 +25,11 @@
         android:layout_width="match_parent"
         android:layout_height="31dp" />
 
-    <LinearLayout
-        android:layout_width="397dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="center">
 
         <Space
             android:layout_width="183dp"
@@ -37,15 +40,17 @@
             android:id="@+id/findingsearch1"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            >
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageView1"
                 android:layout_width="25dp"
                 android:layout_height="36dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/museum"
-                android:duplicateParentState="true"/>
+                android:src="@drawable/museums"
+                android:duplicateParentState="true" />
 
             <TextView
                 android:id="@+id/finding_museum"
@@ -56,7 +61,7 @@
                 android:text="博物馆"
                 android:textAlignment="center"
                 android:textColor="@color/textTitle"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:duplicateParentState="true"/>
         </LinearLayout>
 
@@ -64,14 +69,16 @@
             android:id="@+id/findingsearch2"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_toRightOf="@id/findingsearch1"
+            android:layout_margin="10dp">
 
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="25dp"
                 android:layout_height="36dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/exhibition" />
+                android:src="@drawable/exhibitions" />
 
             <TextView
                 android:id="@+id/finding_exhibition"
@@ -81,13 +88,79 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:text="找展览"
                 android:textAlignment="center"
-                android:textColor="@color/textTitle" />
+                android:textColor="@color/textTitle"
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"></LinearLayout>
+            android:id="@+id/findingsearch3"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toRightOf="@id/findingsearch2"
+            android:layout_margin="10dp">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="25dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/collections"
+                android:duplicateParentState="true"/>
+
+            <TextView
+                android:id="@+id/finding_collection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="找文物"
+                android:textAlignment="center"
+                android:textColor="@color/textTitle"
+                android:textSize="16sp"
+                android:duplicateParentState="true"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/findingsearch4"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toRightOf="@id/findingsearch3"
+            android:layout_margin="10dp"
+            >
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="25dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ranking"
+                android:duplicateParentState="true"/>
+
+            <TextView
+                android:id="@+id/looking_rank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="看排名"
+                android:textAlignment="center"
+                android:textColor="@color/textTitle"
+                android:textSize="16sp"
+                android:duplicateParentState="true"/>
+        </LinearLayout>
+    </RelativeLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="ScrollingViewBehavior">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/finding_part1"/>
+        <include layout="@layout/finding_part2"/>
+        <include layout="@layout/finding_part3"/>
     </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

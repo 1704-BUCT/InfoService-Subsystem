@@ -1,2 +1,3 @@
 rootProject.name='Museum'
 include ':app'
+include ':flowlayout-lib'

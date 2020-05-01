@@ -1,0 +1,64 @@
+<!--发现页面博物馆搜索页面列表每一项的布局文件-->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginRight="25dp"
+    android:layout_marginLeft="25dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="381dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/museum_image"
+            android:layout_width="match_parent"
+            android:layout_height="199dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/museum_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:text="博物馆"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <Space
+                android:layout_width="17dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <com.kaelli.niceratingbar.NiceRatingBar
+                android:id="@+id/show_RatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                app:nrb_rating="1.1"
+                app:nrb_ratingStatus="Disable"
+                app:nrb_starEmptyResource="@drawable/ic_star_border_black_16dp"
+                app:nrb_starFullResource="@drawable/ic_star_black_16dp"
+                app:nrb_starHalfResource="@drawable/ic_star_half_black_16dp"
+                app:nrb_starImageHeight="20dp"
+                app:nrb_starImagePadding="2dp"
+                app:nrb_starImageWidth="20dp"
+                app:nrb_starTotal="5" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

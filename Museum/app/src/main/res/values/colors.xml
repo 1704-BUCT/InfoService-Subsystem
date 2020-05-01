@@ -2,8 +2,10 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorPrimaryDark1">#697DC9</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="textColorPrimary">#000000</color>
     <color name="textTitle">#000000</color>
-
+    <color name="unselect">#979393</color>
+    <color name="select">#FF9800</color>
 </resources>
