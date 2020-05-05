@@ -21,49 +21,43 @@
             android:layout_gravity="center_vertical"
             android:paddingRight="@dimen/space_large"
             android:src="@drawable/ic_back" />
-
         <LinearLayout
-            android:layout_width="275dp"
-            android:layout_height="33dp"
+            android:layout_width="277dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/search_item_background"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="12dp"
             android:paddingRight="12dp">
-
             <EditText
                 android:id="@+id/edit_query"
-                android:layout_width="0dp"
+                android:layout_width="180dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="请输入搜索关键字"
+                android:hint="请输入搜索的博物馆名字"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
                 android:textSize="14sp" />
-
             <ImageView
                 android:id="@+id/iv_clear_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginTop="@dimen/space_normal"
                 android:layout_marginBottom="@dimen/space_normal"
                 android:src="@drawable/ic_delete" />
         </LinearLayout>
-
         <TextView
             android:id="@+id/iv_search"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="25dp"
             android:gravity="center"
-
-            android:paddingRight="@dimen/space_large"
             android:text="搜索" />
     </LinearLayout>
 
@@ -96,7 +90,6 @@
                 android:src="@drawable/ic_delete_history"
                 android:layout_marginLeft="285dp"/>
         </LinearLayout>
-
         <com.zhy.view.flowlayout.TagFlowLayout
             android:id="@+id/fl_search_records"
             android:layout_width="match_parent"
@@ -106,13 +99,19 @@
             app:limit_line_count="3"
             app:max_select="1">
         </com.zhy.view.flowlayout.TagFlowLayout>
-
         <ImageView
             android:id="@+id/iv_arrow"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_arrow"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/iv_arrow_toTop"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_totop"
             android:visibility="gone" />
     </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView

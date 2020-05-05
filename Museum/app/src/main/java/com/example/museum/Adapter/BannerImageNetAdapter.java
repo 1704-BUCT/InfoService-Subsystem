@@ -1,7 +1,10 @@
 package com.example.museum.Adapter;
 
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -23,8 +26,12 @@ public class BannerImageNetAdapter extends BannerAdapter<BannerData, BannerImage
 
     @Override
     public BannerImageHolder onCreateHolder(ViewGroup parent, int viewType) {
-        ImageView imageView = (ImageView) BannerUtils.getView(parent, R.layout.banner_image);
-        return new BannerImageHolder(imageView);
+//        ImageView imageView = (ImageView) BannerUtils.getView(parent, R.layout.banner_image);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.banner_image, parent,
+                        false);
+        BannerImageHolder holder = new BannerImageHolder(view);
+        return holder;
     }
 
     @Override
@@ -34,6 +41,7 @@ public class BannerImageNetAdapter extends BannerAdapter<BannerData, BannerImage
                 .load(data.imageUrl)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
                 .into(holder.imageView);
+        holder.textView.setText("ssssssssssssssss");
     }
 
 }

@@ -13,6 +13,8 @@ import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Space;
+import android.widget.TextView;
 
 import com.example.museum.Components.FilterHeadView;
 import com.example.museum.Datas.News;
@@ -97,14 +99,9 @@ public class RankActivity extends AppCompatActivity {
         List<News> newsList = new ArrayList<>();
         //         从服务器获取后台数据
         new Thread(()->{
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-            Call call = okHttpClient.newCall(request);
             try{
-                Response response = call.execute();
-                String jsonData = response.body().string();
+                String str = HttpRequest.Get(url);
+                String jsonData = str;
                 JSONObject Jobject = new JSONObject(jsonData);
                 JSONArray Jarray = Jobject.getJSONObject("result").getJSONArray("data");
                 for(int i=0;i<Jarray.length();i++) {
@@ -115,7 +112,7 @@ public class RankActivity extends AppCompatActivity {
                 Message message = new Message();
                 message.what = 1;
                 handler.sendMessage(message);    // 将Message对象发送出去
-            }catch(IOException | JSONException e){
+            }catch(JSONException e){
                 e.printStackTrace();
             }}).start();
     }

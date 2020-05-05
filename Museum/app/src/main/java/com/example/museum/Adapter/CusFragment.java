@@ -18,7 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.museum.Components.MyViewPager;
+import com.example.museum.Datas.News;
 import com.example.museum.Datas.TrafficRule;
+import com.example.museum.HttpRequest;
 import com.example.museum.R;
 
 import org.json.JSONArray;
@@ -38,20 +41,25 @@ import okhttp3.Response;
 public class CusFragment extends Fragment {
 
     public static final String ARGUMENT_KEY = "argument1";
-    public static final String ARGUMENT_INFO = "argument2";
     private String mTitle;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private LinearLayoutManager layoutManager;
-    private TrafficRuleAdapter adapter;
+    private TrafficRuleAdapter adapter1;
+    private NewsAdapter adapter2;
     //防止在子线程中更新UI时程序会崩溃，添加了Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 2) {
+            if (msg.what == 1) {
                 progressBar.setVisibility(View.GONE);
-                recyclerView.setAdapter(adapter) ; //UI更改操作
+                recyclerView.setAdapter(adapter1) ; //UI更改操作
+            }
+            if(msg.what==2)
+            {
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setAdapter(adapter2) ; //UI更改操作
             }
         }
     };
@@ -78,7 +86,15 @@ public class CusFragment extends Fragment {
             layoutManager = new LinearLayoutManager(recyclerView.getContext());
             recyclerView.setLayoutManager(layoutManager);
             progressBar=view.findViewById(R.id.progressBarinMuseum);
-            getTraffic();
+            getTraffic("http://v.juhe.cn/jztk/query?subject=1&model=c1&testType=rand&=&key=d1d92112120c130e989b1f0b27f79c4f");
+        }
+        if(bundle.getString(ARGUMENT_KEY).equals("新闻"))
+        {
+            recyclerView = (RecyclerView)view.findViewById(R.id.recyclerview_inmuseum);
+            layoutManager = new LinearLayoutManager(recyclerView.getContext());
+            recyclerView.setLayoutManager(layoutManager);
+            progressBar=view.findViewById(R.id.progressBarinMuseum);
+            getNews("http://api.tianapi.com/blockchain/index?key=01984c397898f9a13008456a723e6210&num=10");
         }
         return view;
     }
@@ -97,31 +113,48 @@ public class CusFragment extends Fragment {
     }
 
     // 从服务器上获取测试数据
-    private void getTraffic()
+    private void getTraffic(String url)
     {
 
         List<TrafficRule> trafficList = new ArrayList<>();
         new Thread(()->{
-            String url = "http://v.juhe.cn/jztk/query?subject=1&model=c1&testType=rand&=&key=d1d92112120c130e989b1f0b27f79c4f";
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-            Call call = okHttpClient.newCall(request);
             try{
-                Response response = call.execute();
-                String jsonData = response.body().string();
+                String jsonData = HttpRequest.Get(url);
                 JSONObject Jobject = new JSONObject(jsonData);
                 JSONArray Jarray = Jobject.getJSONArray("result");
                 for(int i=0;i<Jarray.length();i++) {
                     JSONObject object = Jarray.getJSONObject(i);
                     trafficList.add(new TrafficRule(object.getString("id"), object.getString("question"),object.getString("answer"),object.getString("explains"),object.getString("url")));
                 }
-                adapter = new TrafficRuleAdapter(trafficList);
+                adapter1 = new TrafficRuleAdapter(trafficList);
+                Message message = new Message();
+                message.what = 1;
+                handler.sendMessage(message); // 将Message对象发送出去
+            }catch(JSONException e){
+                e.printStackTrace();
+            }}).start();
+
+    }
+    // 从服务器上获取测试数据
+    private void getNews(String url)
+    {
+
+        List<News> newsList = new ArrayList<>();
+        new Thread(()->{
+            try{
+                String jsonData = HttpRequest.Get(url);
+                JSONObject Jobject = new JSONObject(jsonData);
+                JSONArray Jarray = Jobject.getJSONArray("newslist");
+                for(int i=0;i<Jarray.length();i++) {
+                    JSONObject object = Jarray.getJSONObject(i);
+                    System.out.println(object.getString("title"));
+                    newsList.add(new News(object.getString("title"), object.getString("picUrl"),object.getString("url")));
+                }
+                adapter2 = new NewsAdapter(newsList);
                 Message message = new Message();
                 message.what = 2;
                 handler.sendMessage(message); // 将Message对象发送出去
-            }catch(IOException | JSONException e){
+            }catch(JSONException e){
                 e.printStackTrace();
             }}).start();
 

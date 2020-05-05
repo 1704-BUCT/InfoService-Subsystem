@@ -9,13 +9,16 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.museum.Adapter.CusFragment;
+import com.example.museum.Components.MyViewPager;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.zhengsr.tablib.view.adapter.TabFlowAdapter;
 import com.zhengsr.tablib.view.flow.TabFlowLayout;
@@ -28,7 +31,7 @@ public class MuseumActivity extends AppCompatActivity {
 
     private List<Fragment> mFragments = new ArrayList<>();
     private List<String> mTitle = new ArrayList<>(Arrays.asList("展览 藏品 教育活动 新闻 评论".split(" ")));
-    private ViewPager mViewPager;
+    private MyViewPager mViewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +56,7 @@ public class MuseumActivity extends AppCompatActivity {
 
         collapsingToolbarLayout.setTitle("故宫博物馆");
         collapsingToolbarLayout.setStatusBarScrimColor(getResources().getColor(R.color.colorPrimaryDark1));
-        Glide.with(this).load(R.drawable.museum_appbar_head).into(imageView);
+        Glide.with(this).load(R.drawable.museum_test).into(imageView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setSmoothScrollbarEnabled(true);
         //显示博物馆的具体介绍（用可折叠的文本框）
@@ -69,6 +72,16 @@ public class MuseumActivity extends AppCompatActivity {
         mViewPager.setAdapter(new CusAdapter(getSupportFragmentManager()));
         mViewPager.setOffscreenPageLimit(5);     //好像是限制viewpager中fragment的个数
         rectFlow();
+        FloatingActionButton floatingActionButton = findViewById(R.id.AddComments);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MuseumActivity.this,CommentActivity.class);
+                intent.putExtra("name","故宫博物馆");
+                startActivity(intent);
+            }
+        });
+
     }
 
     // 设置博物馆具体信息页面Tab布局的格式和内容（用来显示展览、藏品、教育活动、新闻、评论）

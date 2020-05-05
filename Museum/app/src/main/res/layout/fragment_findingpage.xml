@@ -43,7 +43,6 @@
             android:orientation="vertical"
             android:layout_margin="10dp"
             >
-
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="25dp"
@@ -51,9 +50,7 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/museums"
                 android:duplicateParentState="true" />
-
             <TextView
-                android:id="@+id/finding_museum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -81,7 +78,6 @@
                 android:src="@drawable/exhibitions" />
 
             <TextView
-                android:id="@+id/finding_exhibition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -107,9 +103,7 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/collections"
                 android:duplicateParentState="true"/>
-
             <TextView
-                android:id="@+id/finding_collection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -128,7 +122,6 @@
             android:layout_toRightOf="@id/findingsearch3"
             android:layout_margin="10dp"
             >
-
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="25dp"
@@ -136,9 +129,7 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/ranking"
                 android:duplicateParentState="true"/>
-
             <TextView
-                android:id="@+id/looking_rank"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

@@ -1,7 +1,6 @@
 package com.example.museum;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,12 +20,10 @@ import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.museum.Adapter.MuseumsAdapter;
-import com.example.museum.DB.RecordsDao;
-import com.example.museum.Datas.Museum;
+import com.example.museum.SQLite.RecordsDao;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -56,7 +52,6 @@ public class MuseumsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_museums);
-
         //以下部分是对搜索框属性的一些设置
         //默认账号
         String username = "007";
@@ -66,6 +61,7 @@ public class MuseumsActivity extends AppCompatActivity {
         final TagFlowLayout tagFlowLayout = findViewById(R.id.fl_search_records);
         final ImageView clearAllRecords = findViewById(R.id.clear_all_records);
         final ImageView moreArrow = findViewById(R.id.iv_arrow);
+        ImageView toTop = findViewById(R.id.iv_arrow_toTop);
         final ImageView backToHome = findViewById(R.id.iv_back);
         TextView search = findViewById(R.id.iv_search);
         ImageView clearSearch = findViewById(R.id.iv_clear_search);
@@ -155,6 +151,17 @@ public class MuseumsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 tagFlowLayout.setLimit(false);
                 mRecordsAdapter.notifyDataChanged();
+                toTop.setVisibility(View.VISIBLE);
+
+            }
+        });
+        // 将内容再折叠起来
+        toTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagFlowLayout.setLimit(true);
+                mRecordsAdapter.notifyDataChanged();
+                toTop.setVisibility(View.GONE);
             }
         });
         //清除所有记录

@@ -1,4 +1,4 @@
-package com.example.museum.DB;
+package com.example.museum.SQLite;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

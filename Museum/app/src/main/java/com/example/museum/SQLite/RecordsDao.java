@@ -1,4 +1,4 @@
-package com.example.museum.DB;
+package com.example.museum.SQLite;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;

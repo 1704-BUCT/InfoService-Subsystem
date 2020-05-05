@@ -4,6 +4,7 @@ import com.example.museum.Adapter.BannerImageNetAdapter;
 import com.example.museum.Adapter.NewsAdapter;
 import com.example.museum.Datas.BannerData;
 import com.example.museum.Datas.News;
+import com.example.museum.HttpRequest;
 import com.example.museum.NewsActivity;
 import com.example.museum.R;
 
@@ -68,7 +69,6 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
         banner.addOnPageChangeListener(this);
         //圆角
         banner.setBannerRound(BannerUtils.dp2px(5));
-
         recyclerView = (RecyclerView)root.findViewById(R.id.recycler_firstview);
         layoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -80,16 +80,8 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
         // 从服务器获取后台数据
         List<News> newsList = new ArrayList<>();
         new Thread(()->{
-//            String url = "https://www.baidu.com";
-            String url = "http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811";
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-            Call call = okHttpClient.newCall(request);
             try{
-                Response response = call.execute();
-                String jsonData = response.body().string();
+                String jsonData = HttpRequest.Get("http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811");
                 JSONObject Jobject = new JSONObject(jsonData);
                 JSONArray Jarray = Jobject.getJSONObject("result").getJSONArray("data");
                 for(int i=0;i<Jarray.length();i++) {
@@ -101,22 +93,19 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
                 Message message = new Message();
                 message.what = 1;
                 handler.sendMessage(message);    // 将Message对象发送出去
-            }catch(IOException | JSONException e){
+            }catch(JSONException e){
                 e.printStackTrace();
             }}).start();
         return root;
     }
-
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
-
     @Override
     public void onPageSelected(int position) {
 
     }
-
     @Override
     public void onPageScrollStateChanged(int state) {
 

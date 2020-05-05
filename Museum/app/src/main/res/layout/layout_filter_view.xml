@@ -44,49 +44,52 @@
 
         <RelativeLayout
             android:id="@+id/rlContent"
-            android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            >
-                <LinearLayout
-                    android:id="@+id/zonghe"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginLeft="20dp">
+            android:layout_height="90dp"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:id="@+id/zonghe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp">
+
                 <TextView
-                    android:text="综合"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="22dp"/>
-                </LinearLayout>
-              <LinearLayout
+                    android:text="综合"
+                    android:textSize="22dp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/divier_mask"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                  android:layout_below="@+id/zonghe">
+                android:layout_below="@+id/zonghe">
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:src="@drawable/divider"
                     android:layout_margin="4dp"
-                   />
-              </LinearLayout>
+                    android:src="@drawable/divider" />
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/cishu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:layout_marginBottom="3dp"
+                android:layout_below="@+id/divier_mask"
                 android:layout_marginLeft="20dp"
-                android:layout_below="@+id/divier_mask">
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp">
+
                 <TextView
-                    android:text="展览次数"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="22dp"
-                    />
+                    android:text="展览次数"
+                    android:textSize="22dp" />
             </LinearLayout>
         </RelativeLayout>
     </FrameLayout>
