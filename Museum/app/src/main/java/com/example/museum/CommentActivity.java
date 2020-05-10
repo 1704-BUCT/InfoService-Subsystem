@@ -2,8 +2,12 @@ package com.example.museum;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +20,15 @@ import android.widget.RatingBar;
 
 
 import com.classichu.lineseditview.LinesEditView;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Date;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+import okhttp3.FormBody;
 
 /*
 * 评论+打分页面
@@ -25,20 +36,36 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class CommentActivity extends AppCompatActivity {
 
-    MaterialRatingBar materialRatingBar;
+    MaterialRatingBar materialRatingBar1;
+    MaterialRatingBar materialRatingBar2;
+    MaterialRatingBar materialRatingBar3;
+    //防止在子线程中更新UI时程序会崩溃，添加了Handler
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1)
+                Snackbar.make(materialRatingBar1, "评价成功", Snackbar.LENGTH_SHORT).show();
+            else
+                Snackbar.make(materialRatingBar2, "评价失败，请检查网络情况", Snackbar.LENGTH_SHORT).show();
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
-        materialRatingBar = findViewById(R.id.ratingbar1);
-        materialRatingBar.setActivated(true);
-
-        materialRatingBar.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
-            @Override
-            public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
-                System.out.println(rating);
-            }
-        });
+        materialRatingBar1 = findViewById(R.id.ratingbar1);
+        materialRatingBar1.setActivated(true);
+        materialRatingBar2 = findViewById(R.id.ratingbar2);
+        materialRatingBar2.setActivated(true);
+        materialRatingBar3 = findViewById(R.id.ratingbar3);
+        materialRatingBar3.setActivated(true);
+//        materialRatingBar.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
+//            @Override
+//            public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
+//                System.out.println(rating);
+//            }
+//        });
         ImageView backIcon = findViewById(R.id.backtomuseum);
         backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +79,29 @@ public class CommentActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println(linesEditView.getContentText()+materialRatingBar.getRating());
+
+
+
+                new Thread(()->{
+                    int mid=3;
+                    //获取当前时间
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// HH:mm:ss
+                    Date date = new Date(System.currentTimeMillis());
+                    FormBody formBody = new FormBody.Builder().add("mid","3")
+                            .add("account","333333")
+                            .add("content",linesEditView.getContentText())
+                            .add("environmentstar", String.valueOf(materialRatingBar1.getRating()))
+                            .add("exhibitionstar", String.valueOf(materialRatingBar2.getRating()))
+                            .add("servicestar", String.valueOf(materialRatingBar3.getRating()))
+                            .add("time",simpleDateFormat.format(date))
+                            .build();
+                String state = HttpRequest.Post("http://192.168.5.1:1211/user/comments", formBody);
+                Message message = new Message();
+                message.what = new Integer(state);
+                handler.sendMessage(message);    // 将Message对象发送出去
+
+                 }).start();
+//                System.out.println(linesEditView.getContentText()+materialRatingBar.getRating());
             }
         });
 //        materialRatingBar.startAnimation(new RatingAnimation());

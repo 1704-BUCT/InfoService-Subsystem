@@ -1,5 +1,6 @@
 package com.example.museum.UI.first;
 
+import com.example.museum.API.API;
 import com.example.museum.Adapter.BannerImageNetAdapter;
 import com.example.museum.Adapter.NewsAdapter;
 import com.example.museum.Datas.BannerData;
@@ -22,7 +23,11 @@ import com.youth.banner.listener.OnPageChangeListener;
 import com.youth.banner.util.BannerUtils;
 import org.json.*;
 import java.io.IOException;
-import java.util.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+
 import okhttp3.*;
 
 
@@ -35,6 +40,8 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
     private LinearLayoutManager layoutManager;
     private ProgressBar progressBar;
     private NewsAdapter adapter;
+    private Banner banner;
+    private List<News> bannarDatas;
     //防止在子线程中更新UI时程序会崩溃，添加了Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
@@ -42,6 +49,16 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
                 progressBar.setVisibility(View.GONE);
+                //设置适配器
+                banner.setAdapter(new BannerImageNetAdapter(bannarDatas));
+                //设置点击事件
+                banner.setOnBannerListener((data, position) -> {
+                    //转到新闻页面，并传递存储新闻的数组下标给该页面
+                    Intent intent = new Intent(getContext(), NewsActivity.class);
+//                intent.putExtra("Index",position);
+                    intent.putExtra("Url",bannarDatas.get(position).getUrl());
+                    startActivity(intent);
+                });
                 recyclerView.setAdapter(adapter) ; //UI更改操作
             }
         }
@@ -52,19 +69,11 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
         View root = inflater.inflate(R.layout.fragment_firstpage, container, false);
         final TextView textView = root.findViewById(R.id.text_firstTitle);
         textView.setText("精选");
-
-        final Banner banner = root.findViewById(R.id.banner);
-        //设置适配器
-        banner.setAdapter(new BannerImageNetAdapter(BannerData.getTestData()));
+        banner = root.findViewById(R.id.banner);
+        bannarDatas = new ArrayList<>();
         //设置指示器
         banner.setIndicator(new CircleIndicator(getContext()));
-        //设置点击事件
-        banner.setOnBannerListener((data, position) -> {
-                //转到新闻页面，并传递存储新闻的数组下标给该页面
-                Intent intent = new Intent(getContext(), NewsActivity.class);
-                intent.putExtra("Index",position);
-                startActivity(intent);
-        });
+
         //添加切换监听
         banner.addOnPageChangeListener(this);
         //圆角
@@ -81,12 +90,18 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
         List<News> newsList = new ArrayList<>();
         new Thread(()->{
             try{
-                String jsonData = HttpRequest.Get("http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811");
-                JSONObject Jobject = new JSONObject(jsonData);
-                JSONArray Jarray = Jobject.getJSONObject("result").getJSONArray("data");
+//                String jsonData = HttpRequest.Get("http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811");
+                String jsonData = HttpRequest.Get(API.SHOW_ALLNews);
+//                JSONObject Jobject = new JSONObject(jsonData);
+//                JSONArray Jarray = Jobject.getJSONObject("result").getJSONArray("data");
+                JSONArray Jarray = new JSONArray(jsonData);
                 for(int i=0;i<Jarray.length();i++) {
                     JSONObject object = Jarray.getJSONObject(i);
-                    newsList.add(new News(object.getString("title"), object.getString("thumbnail_pic_s"),object.getString("url")));
+                    if(i<3)
+                        bannarDatas.add(new News(object.getString("title"), object.getString("imgurl"),object.getString("url")));
+                    else
+//                    newsList.add(new News(object.getString("title"), object.getString("thumbnail_pic_s"),object.getString("url")));
+                        newsList.add(new News(object.getString("title"), object.getString("imgurl"),object.getString("url"),object.getString("author"), object.getString("releasetime"),object.getInt("nature")));
                 }
                 progressBar=root.findViewById(R.id.progressBar2);
                 adapter = new NewsAdapter(newsList);

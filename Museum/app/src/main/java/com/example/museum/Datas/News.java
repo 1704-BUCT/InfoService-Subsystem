@@ -12,6 +12,18 @@ public class News {
     private String title;
     private String imgurl;
     private String url;
+    private String author;
+    private String releasetime;
+    private Integer nature;
+
+    public News(String title, String imgurl, String url, String author, String releasetime, Integer nature) {
+        this.title = title;
+        this.imgurl = imgurl;
+        this.url = url;
+        this.author = author;
+        this.releasetime = releasetime;
+        this.nature = nature;
+    }
 
     public News(Integer id, String title, String imgurl) {
         this.id = id;
@@ -24,6 +36,31 @@ public class News {
         this.imgurl = imgurl;
         this.url = url;
     }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getReleasetime() {
+        return releasetime.substring(0,10);
+    }
+
+    public void setReleasetime(String releasetime) {
+        this.releasetime = releasetime;
+    }
+
+    public Integer getNature() {
+        return nature;
+    }
+
+    public void setNature(Integer nature) {
+        this.nature = nature;
+    }
+
     public Integer getId() {
         return id;
     }

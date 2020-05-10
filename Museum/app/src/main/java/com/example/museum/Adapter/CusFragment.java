@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.museum.API.API;
 import com.example.museum.Components.MyViewPager;
 import com.example.museum.Datas.News;
 import com.example.museum.Datas.TrafficRule;
@@ -94,7 +95,7 @@ public class CusFragment extends Fragment {
             layoutManager = new LinearLayoutManager(recyclerView.getContext());
             recyclerView.setLayoutManager(layoutManager);
             progressBar=view.findViewById(R.id.progressBarinMuseum);
-            getNews("http://api.tianapi.com/blockchain/index?key=01984c397898f9a13008456a723e6210&num=10");
+            getNews(API.SHOW_ALLNews);
         }
         return view;
     }
@@ -143,12 +144,12 @@ public class CusFragment extends Fragment {
         new Thread(()->{
             try{
                 String jsonData = HttpRequest.Get(url);
-                JSONObject Jobject = new JSONObject(jsonData);
-                JSONArray Jarray = Jobject.getJSONArray("newslist");
+//                JSONObject Jobject = new JSONObject(jsonData);
+//                JSONArray Jarray = Jobject.getJSONArray("newslist");
+                JSONArray Jarray = new JSONArray(jsonData);
                 for(int i=0;i<Jarray.length();i++) {
                     JSONObject object = Jarray.getJSONObject(i);
-                    System.out.println(object.getString("title"));
-                    newsList.add(new News(object.getString("title"), object.getString("picUrl"),object.getString("url")));
+                    newsList.add(new News(object.getString("title"), object.getString("imgurl"),object.getString("url"),object.getString("author"), object.getString("releasetime"),object.getInt("nature")));
                 }
                 adapter2 = new NewsAdapter(newsList);
                 Message message = new Message();

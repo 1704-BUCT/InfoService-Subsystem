@@ -24,11 +24,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         View newsView;
         ImageView newsImage;
         TextView newsName;
+        TextView newsAuthor;
+        TextView newsReleasetime;
         public ViewHolder(View view) {
             super(view);
             newsView = view;
             newsImage = (ImageView) view.findViewById(R.id.news_image);
             newsName = (TextView) view.findViewById(R.id.news_title);
+            newsAuthor = (TextView)view.findViewById(R.id.news_author);
+            newsReleasetime = (TextView)view.findViewById(R.id.news_releasetime);
         }
     }
     // 自己找的测试数据
@@ -64,10 +68,23 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         News news = mNewsList.get(position);
-        Glide.with(holder.itemView)
-                .load(news.getImgurl())
-                .into(holder.newsImage);
+        if(news.getImgurl().equals("") || news.getImgurl()==null)
+        {
+            Glide.with(holder.itemView)
+                    .load(R.drawable.news_picnull)
+                    .into(holder.newsImage);
+        }
+        else
+            Glide.with(holder.itemView)
+                    .load(news.getImgurl())
+                    .into(holder.newsImage);
         holder.newsName.setText(news.getName());
+        if(position>3)
+        {
+            holder.newsAuthor.setText(news.getAuthor());
+            holder.newsReleasetime.setText(news.getReleasetime().toString());
+        }
+
     }
 
     @Override
