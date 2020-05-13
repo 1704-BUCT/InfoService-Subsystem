@@ -54,8 +54,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 News news = mNewsList.get(position);
-//                Toast.makeText(v.getContext(), "you clicked view " + news.getName(),
-//                        Toast.LENGTH_SHORT).show();
                 //在非activity类中使用startActicity只需写成getContext().startActivity(intent)即可
                 Intent intent = new Intent(parent.getContext(), NewsActivity.class);
                 intent.putExtra("Url",mNewsList.get(position).getUrl());

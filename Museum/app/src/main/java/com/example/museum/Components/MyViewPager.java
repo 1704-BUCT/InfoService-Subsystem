@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 
 /*
-自定义的viewpager，解决原有viewpager不能自适应高度的问题
+    自定义的viewpager，解决原有viewpager不能自适应高度的问题
 * */
 public class MyViewPager extends ViewPager {
 

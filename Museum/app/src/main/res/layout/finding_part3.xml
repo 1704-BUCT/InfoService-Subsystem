@@ -65,7 +65,7 @@
             android:id="@+id/recycler_findingpart3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="-25dp"
+            android:layout_marginStart="-22dp"
             android:orientation="horizontal"
             />
     </LinearLayout>

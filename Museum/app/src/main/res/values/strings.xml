@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Museum</string>
-    <!--    <string name="title_home">Home</string>-->
-    <!--    <string name="title_dashboard">Dashboard</string>-->
-    <!--    <string name="title_notifications">Notifications</string>-->
+    <!--    <string ic_name="title_home">Home</string>-->
+    <!--    <string ic_name="title_dashboard">Dashboard</string>-->
+    <!--    <string ic_name="title_notifications">Notifications</string>-->
     <string name="nav_item1">精选</string>
     <string name="nav_item2">发现</string>
     <string name="nav_item3">导览</string>

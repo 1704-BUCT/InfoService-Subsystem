@@ -17,8 +17,8 @@ import com.example.museum.Adapter.CollectionAdapter_FindingPage;
 import com.example.museum.Adapter.ExhibitionAdapter_FindingPage;
 import com.example.museum.Adapter.MuseumsAdapter;
 
-import com.example.museum.CollectionActivity;
-import com.example.museum.ExhibitionActivity;
+import com.example.museum.CollectionsActivity;
+import com.example.museum.ExhibitionsActivity;
 import com.example.museum.MuseumsActivity;
 import com.example.museum.R;
 import com.example.museum.RankActivity;
@@ -87,10 +87,10 @@ public class FindingFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), MuseumsActivity.class));
                 break;
             case R.id.findingsearch2:
-                startActivity(new Intent(getContext(), ExhibitionActivity.class));
+                startActivity(new Intent(getContext(), ExhibitionsActivity.class));
                 break;
             case R.id.findingsearch3:
-                startActivity(new Intent(getContext(), CollectionActivity.class));
+                startActivity(new Intent(getContext(), CollectionsActivity.class));
                 break;
             case R.id.findingsearch4:
                 startActivity(new Intent(getContext(), RankActivity.class));
@@ -99,10 +99,10 @@ public class FindingFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), MuseumsActivity.class));
                 break;
             case R.id.part_more2:
-                startActivity(new Intent(getContext(), ExhibitionActivity.class));
+                startActivity(new Intent(getContext(), ExhibitionsActivity.class));
                 break;
             case R.id.part_more1:
-                startActivity(new Intent(getContext(), CollectionActivity.class));
+                startActivity(new Intent(getContext(), CollectionsActivity.class));
                 break;
         }
     }

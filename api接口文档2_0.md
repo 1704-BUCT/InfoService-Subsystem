@@ -745,7 +745,7 @@ collection/findByName/{name}
             [
 		      {uid:评论用户名字,
 		      avatarurl:评论用户头像 
-	                      time:评论时间,
+	          time:评论时间,
 		      environmentstar:,
 		      exhibitionstar:,
 		      servicestar,	

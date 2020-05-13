@@ -16,7 +16,9 @@ import com.example.museum.R;
 
 import java.util.List;
 
-
+/*
+* 搜索页面藏品recycleView的适配器定义
+* */
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
 
     private List<Collection> antiqueList;
@@ -63,10 +65,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
         Collection antique = antiqueList.get(position);
         Glide.with(holder.itemView)
                 .load(antique.getImgurl())
-//                .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
                 .into(holder.image);
-
-//        holder.newsImage.setImageResource(.getImageId());
         holder.name.setText(antique.getName());
         holder.mname.setText(antique.getMname());
     }

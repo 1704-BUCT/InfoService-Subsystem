@@ -8,10 +8,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
-<!--        <item name="android:statusBarColor">@color/colorPrimary</item>-->
+<!--        <item ic_name="android:statusBarColor">@color/colorPrimary</item>-->
         <!--  变成白底黑字  -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-<!--        <item name="android:fitsSystemWindows">true</item>-->
+<!--        <item ic_name="android:fitsSystemWindows">true</item>-->
         <!--   设置水平分割线的属性   -->
         <item name="android:listDivider">@drawable/divider</item>
     </style>
@@ -29,5 +29,9 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
+    <style name="myRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/rating</item>
+        <item name="android:minHeight">20dp</item>
+        <item name="android:maxHeight">20dp</item>
+    </style>
 </resources>

@@ -80,8 +80,8 @@ public class MuseumsAdapter extends RecyclerView.Adapter<MuseumsAdapter.ViewHold
                 .load(museum.getImgurl())
                 .into(holder.museumImage);
         holder.museumName.setText(museum.getName());
-        holder.niceRatingBar.setRating(Float.parseFloat(museum.getStar()));             //显示博物馆的平均分数
-    }
+        holder.niceRatingBar.setRating((float) museum.getAvgstar());             //显示博物馆的平均分数
+}
 
     @Override
     public int getItemCount() {

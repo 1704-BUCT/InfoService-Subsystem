@@ -11,21 +11,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_gravity="center">
-        <ImageView
-            android:id="@+id/rank_idpic"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:src="@drawable/no_1" />
-        <TextView
-            android:id="@+id/rank_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="0"
-            android:textColor="#FF9800"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+<!--        <ImageView-->
+<!--            android:id="@+id/rank_idpic"-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:src="@drawable/no_1" />-->
+<!--        <TextView-->
+<!--            android:id="@+id/rank_id"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:text="0"-->
+<!--            android:textColor="#FF9800"-->
+<!--            android:textSize="20dp"-->
+<!--            android:textStyle="bold" />-->
     </RelativeLayout>
     <ImageView
         android:id="@+id/news_image"

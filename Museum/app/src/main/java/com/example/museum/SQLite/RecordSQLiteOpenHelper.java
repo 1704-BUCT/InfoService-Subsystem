@@ -5,11 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Project：taobaohistory
- * Author：zj
- * Date：2018/11/14
- * Version: 3.0.0
- * Description：数据库帮助类
+ * 数据库帮助类（借鉴）
  */
 public class RecordSQLiteOpenHelper extends SQLiteOpenHelper {
     private final static String DB_NAME = "search_history.db";

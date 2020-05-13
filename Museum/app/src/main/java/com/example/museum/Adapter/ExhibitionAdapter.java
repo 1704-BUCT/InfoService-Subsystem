@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+/*
+* 搜索展览页面的recycleView的适配器定义
+* */
 public class ExhibitionAdapter extends RecyclerView.Adapter<ExhibitionAdapter.ViewHolder> {
 
     private List<Exhibition> exhibitionList=new ArrayList<>();
@@ -65,12 +67,8 @@ public class ExhibitionAdapter extends RecyclerView.Adapter<ExhibitionAdapter.Vi
         Exhibition antique = exhibitionList.get(position);
         Glide.with(holder.itemView)
                 .load(antique.getImgurl())
-//                .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
                 .into(holder.exhibitionImage);
-
-//        holder.newsImage.setImageResource(.getImageId());
         holder.exhibitionName.setText(antique.getName());
-        System.out.println(antique.getName());
         holder.museumName.setText(antique.getMname());
     }
 

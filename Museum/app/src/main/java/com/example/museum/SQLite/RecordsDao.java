@@ -14,11 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Project：taobaohistory
- * Author：zj
- * Date：2018/11/14
- * Version: 3.0.0
- * Description：历史记录搜索操作类
+ * 和历史搜索有关的数据库定义
  */
 public class RecordsDao {
     private final String TABLE_NAME = "records";
@@ -161,7 +157,6 @@ public class RecordsDao {
 
     /**
      * 获取当前用户全部搜索记录
-     *
      * @return 记录集合
      */
     public List<String> getRecordsList() {

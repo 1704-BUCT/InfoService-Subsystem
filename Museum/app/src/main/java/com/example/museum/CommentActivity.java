@@ -60,12 +60,7 @@ public class CommentActivity extends AppCompatActivity {
         materialRatingBar2.setActivated(true);
         materialRatingBar3 = findViewById(R.id.ratingbar3);
         materialRatingBar3.setActivated(true);
-//        materialRatingBar.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
-//            @Override
-//            public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
-//                System.out.println(rating);
-//            }
-//        });
+
         ImageView backIcon = findViewById(R.id.backtomuseum);
         backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,15 +75,13 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-
                 new Thread(()->{
                     int mid=3;
                     //获取当前时间
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// HH:mm:ss
                     Date date = new Date(System.currentTimeMillis());
                     FormBody formBody = new FormBody.Builder().add("mid","3")
-                            .add("account","333333")
+                            .add("ic_account","333333")
                             .add("content",linesEditView.getContentText())
                             .add("environmentstar", String.valueOf(materialRatingBar1.getRating()))
                             .add("exhibitionstar", String.valueOf(materialRatingBar2.getRating()))
@@ -101,7 +94,7 @@ public class CommentActivity extends AppCompatActivity {
                 handler.sendMessage(message);    // 将Message对象发送出去
 
                  }).start();
-//                System.out.println(linesEditView.getContentText()+materialRatingBar.getRating());
+
             }
         });
 //        materialRatingBar.startAnimation(new RatingAnimation());

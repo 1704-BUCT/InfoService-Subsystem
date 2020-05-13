@@ -17,14 +17,13 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.*;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.youth.banner.*;
 import com.youth.banner.indicator.CircleIndicator;
 import com.youth.banner.listener.OnPageChangeListener;
 import com.youth.banner.util.BannerUtils;
 import org.json.*;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +41,7 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
     private NewsAdapter adapter;
     private Banner banner;
     private List<News> bannarDatas;
+    private TextView textView;
     //防止在子线程中更新UI时程序会崩溃，添加了Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
@@ -61,14 +61,17 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
                 });
                 recyclerView.setAdapter(adapter) ; //UI更改操作
             }
+            else
+            {
+                progressBar.setVisibility(View.GONE);
+                textView.setVisibility(View.VISIBLE);
+            }
         }
     };
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_firstpage, container, false);
-        final TextView textView = root.findViewById(R.id.text_firstTitle);
-        textView.setText("精选");
         banner = root.findViewById(R.id.banner);
         bannarDatas = new ArrayList<>();
         //设置指示器
@@ -89,26 +92,30 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
         // 从服务器获取后台数据
         List<News> newsList = new ArrayList<>();
         new Thread(()->{
+            Message message = new Message();
             try{
 //                String jsonData = HttpRequest.Get("http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811");
                 String jsonData = HttpRequest.Get(API.SHOW_ALLNews);
 //                JSONObject Jobject = new JSONObject(jsonData);
 //                JSONArray Jarray = Jobject.getJSONObject("result").getJSONArray("data");
                 JSONArray Jarray = new JSONArray(jsonData);
-                for(int i=0;i<Jarray.length();i++) {
+                for (int i = 0; i < Jarray.length(); i++) {
                     JSONObject object = Jarray.getJSONObject(i);
-                    if(i<3)
-                        bannarDatas.add(new News(object.getString("title"), object.getString("imgurl"),object.getString("url")));
+                    if (i < 3)
+                        bannarDatas.add(new News(object.getString("title"), object.getString("imgurl"), object.getString("url")));
                     else
-//                    newsList.add(new News(object.getString("title"), object.getString("thumbnail_pic_s"),object.getString("url")));
-                        newsList.add(new News(object.getString("title"), object.getString("imgurl"),object.getString("url"),object.getString("author"), object.getString("releasetime"),object.getInt("nature")));
+//                    newsList.ic_add(new News(object.getString("title"), object.getString("thumbnail_pic_s"),object.getString("url")));
+                        newsList.add(new News(object.getString("title"), object.getString("imgurl"), object.getString("url"), object.getString("author"), object.getString("releasetime"), object.getInt("nature")));
                 }
-                progressBar=root.findViewById(R.id.progressBar2);
+                progressBar = root.findViewById(R.id.progressBar2);
                 adapter = new NewsAdapter(newsList);
-                Message message = new Message();
                 message.what = 1;
                 handler.sendMessage(message);    // 将Message对象发送出去
             }catch(JSONException e){
+                progressBar = root.findViewById(R.id.progressBar2);
+                textView=root.findViewById(R.id.news_error);
+                message.what = 0;
+                handler.sendMessage(message);    // 将Message对象发送出去
                 e.printStackTrace();
             }}).start();
         return root;

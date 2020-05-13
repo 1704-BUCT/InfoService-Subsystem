@@ -20,7 +20,6 @@
         android:textStyle="bold"
         android:textColor="@color/textTitle"
         android:text="@string/nav_item1" />
-
     <com.youth.banner.Banner
         android:id="@+id/banner"
         android:layout_width="319dp"
@@ -35,7 +34,14 @@
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:visibility="gone"/>
-
+    <TextView
+        android:id="@+id/news_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="sorry,网络似乎出了点错~"
+        android:visibility="gone"/>
     <Space
         android:layout_width="match_parent"
         android:layout_height="21dp" />

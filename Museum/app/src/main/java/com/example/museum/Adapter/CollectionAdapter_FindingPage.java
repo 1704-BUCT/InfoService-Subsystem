@@ -1,7 +1,5 @@
 package com.example.museum.Adapter;
 
-
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +16,9 @@ import com.example.museum.R;
 
 import java.util.List;
 
+/*
+* 发现页面recycleView适配器定义
+* */
 public class CollectionAdapter_FindingPage extends RecyclerView.Adapter<CollectionAdapter_FindingPage.ViewHolder> {
 
     private List<Collection>    collecitonList;
@@ -26,15 +27,18 @@ public class CollectionAdapter_FindingPage extends RecyclerView.Adapter<Collecti
         ImageView collectionImage;
         TextView collectionName;
 
-
         public ViewHolder(View view) {
             super(view);
             collectionImage = (ImageView) view.findViewById(R.id.collection_image);
             collectionName = (TextView) view.findViewById(R.id.collection_name);
         }
     }
+    //获得测试数据
     public CollectionAdapter_FindingPage() {
         collecitonList = Collection.getTestDatas();
+    }
+    public CollectionAdapter_FindingPage(List<Collection>    mCollecitonList) {
+        collecitonList = mCollecitonList;
     }
 
     @Override
@@ -45,6 +49,7 @@ public class CollectionAdapter_FindingPage extends RecyclerView.Adapter<Collecti
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Collection collection = collecitonList.get(position);
@@ -52,8 +57,8 @@ public class CollectionAdapter_FindingPage extends RecyclerView.Adapter<Collecti
                 .load(collection.getImgurl())
                 .into(holder.collectionImage);
         holder.collectionName.setText(collection.getName());
-//        holder.niceRatingBar.setRating(Float.parseFloat(museum.getStar()));             //显示博物馆的平均分数
     }
+
     @Override
     public int getItemCount() {
         return collecitonList.size();

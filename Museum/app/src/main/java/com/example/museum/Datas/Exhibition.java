@@ -1,19 +1,20 @@
 package com.example.museum.Datas;
 
-import android.content.Intent;
-
 import java.util.ArrayList;
 import java.util.List;
 
+
+/*
+    展览类的定义
+* */
 public class Exhibition {
     Integer eid;
     String name;
     String imgurl;
     String mname;
-    String maddress;
     String introduce;
-    String explainations;
-    public Exhibition(Integer eid1,  String name,String imgurl,String mname) {
+
+    public Exhibition(Integer eid,  String name,String imgurl,String mname) {
         this.eid = eid;
         this.name = name;
         this.imgurl = imgurl;
@@ -52,13 +53,6 @@ public class Exhibition {
         this.mname = mname;
     }
 
-    public String getMaddress() {
-        return maddress;
-    }
-
-    public void setMaddress(String maddress) {
-        this.maddress = maddress;
-    }
 
     public String getIntroduce() {
         return introduce;
@@ -68,20 +62,14 @@ public class Exhibition {
         this.introduce = introduce;
     }
 
-    public String getExplainations() {
-        return explainations;
-    }
 
-    public void setExplainations(String explainations) {
-        this.explainations = explainations;
-    }
 
     public static List<Exhibition> getTestDatas(){
         List<Exhibition> exhibitions=new ArrayList<>();
-        exhibitions.add(new Exhibition(1,"清代军机处史料展","https://img.dpm.org.cn/Uploads/Picture/2020/04/17/s5e997affc5961.jpg","故宫博物馆"));
-        exhibitions.add(new Exhibition(2,"储秀宫","http://img5.imgtn.bdimg.com/it/u=187327660,165237829&fm=26&gp=0.jpg","故宫博物馆"));
-        exhibitions.add(new Exhibition(3,"美术作品展","http://www.chnmuseum.cn/portals/0/web/zt/20190809yldf/img/title.jpg","中国国家博物馆"));
-        exhibitions.add(new Exhibition(4,"河北衡水文化展","http://www.chnmuseum.cn/Portals/0/web/zt/template/2019/20190423wenhuahengshui/images/banner.jpg","中国国家博物馆"));
+        exhibitions.add(new Exhibition(1,"红色记忆——馆藏革命军事艺术作品陈列","http://www.jb.mil.cn/zlcl/jbcl/./jsysc/images/P020170712398830470409.jpg","中国人民革命军事博物馆"));
+        exhibitions.add(new Exhibition(2,"“人民总理周恩来”展览开幕","http://www.luxunmuseum.com.cn//data/attached/a0b923820dcc509a/image/20191011/15707731117862.jpg","北京鲁迅博物馆"));
+        exhibitions.add(new Exhibition(3,"新中国国防和军队建设陈列（筹建中）","http://www.jb.mil.cn/zlcl/jbcl/./gfhjdjscl/images/P020170707464016725983.jpg","中国人民革命军事博物馆"));
+        exhibitions.add(new Exhibition(4,"兵器陈列","http://www.jb.mil.cn/zlcl/jbcl/./bqcl/images/P020170712372640472802.jpg","中国人民革命军事博物馆"));
         return exhibitions;
     }
 }

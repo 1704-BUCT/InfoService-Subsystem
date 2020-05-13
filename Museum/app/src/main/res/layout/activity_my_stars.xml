@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical"
+    android:background="@color/white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        >
+        <ImageView
+            android:id="@+id/backtomypage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="?attr/homeAsUpIndicator" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="我的收藏"
+            android:layout_marginStart="20dp"
+            android:textSize="22sp"/>
+    </LinearLayout>
+        <com.zhengsr.tablib.view.flow.TabFlowLayout
+            android:id="@+id/rectflow_starpage"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            app:tab_visual_count="4"
+            app:tab_type="rect"
+            app:tab_color="@color/select"
+            app:tab_height="2dp"
+            app:tab_margin_b="2dp" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.example.museum.Components.MyViewPager
+            android:id="@+id/viewpager_starpage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#15FFFDFD"
+            />
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

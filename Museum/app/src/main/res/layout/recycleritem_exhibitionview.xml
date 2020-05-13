@@ -3,38 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="90dp">
 
+    <ImageView
+        android:id="@+id/exhibition_image"
+        android:layout_width="110dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:scaleType="centerCrop" />
+    <androidx.legacy.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
     <LinearLayout
         android:layout_width="219dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="20dp"
         android:orientation="vertical"
-        android:layout_marginRight="50dp"
         >
     <TextView
         android:id="@+id/exhibition_name"
         android:layout_width="219dp"
         android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:text="test"
         android:textSize="18sp"
-        android:minHeight="70dp"
         android:textStyle="bold" />
-    <TextView
-        android:id="@+id/museum_name"
-        android:layout_width="219dp"
-        android:layout_height="wrap_content"
-        android:text="test"
-        android:gravity="right"
-        android:textSize="15sp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/museum_name"
+            android:layout_width="219dp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="test"
+            android:textSize="15sp" />
     </LinearLayout>
-
-
-    <ImageView
-        android:id="@+id/exhibition_image"
-        android:layout_width="72dp"
-        android:layout_height="70dp"
-        android:layout_marginRight="20dp"
-        android:scaleType="centerCrop"
-        android:layout_gravity="center_vertical"
-        />
 
 </LinearLayout>

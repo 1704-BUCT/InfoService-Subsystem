@@ -18,6 +18,9 @@ import androidx.annotation.Nullable;
 
 import com.example.museum.R;
 
+/*
+* 排名页面筛选组件的定义
+* */
 public class FilterHeadView extends LinearLayout {
 
 

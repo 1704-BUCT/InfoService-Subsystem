@@ -3,16 +3,20 @@
     package="com.example.museum">
     <!-- 添加网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Museum"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CommentActivity"></activity>
+        <activity android:name=".MyStars"></activity>
+        <activity android:name=".EditInfo" />
+        <activity
+            android:name=".EducationActivity"
+            android:theme="@style/Museum" />
+        <activity android:name=".CommentActivity" />
         <activity android:name=".RankActivity" />
         <activity
             android:name=".MuseumActivity"
@@ -22,13 +26,14 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".MuseumsActivity" />
         <activity android:name=".NewsActivity" />
-        <activity android:name=".CollectionActivity" />
-        <activity android:name=".ExhibitionActivity" />
+        <activity android:name=".CollectionsActivity" />
+        <activity android:name=".ExhibitionsActivity" />
     </application>
 
 </manifest>

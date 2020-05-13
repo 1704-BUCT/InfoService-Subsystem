@@ -1,15 +1,15 @@
 package com.example.museum;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.io.IOException;
-
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/*
+* 网络请求的一些函数
+* */
 public class HttpRequest {
     public static OkHttpClient client = new OkHttpClient();
     public static String Get(String url)

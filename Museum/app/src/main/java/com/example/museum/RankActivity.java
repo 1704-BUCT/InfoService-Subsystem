@@ -1,8 +1,6 @@
 package com.example.museum;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,9 +11,9 @@ import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Space;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
+import com.example.museum.Adapter.RankMuseumsAdapter;
 import com.example.museum.Components.FilterHeadView;
 import com.example.museum.Datas.News;
 
@@ -23,25 +21,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
+/*
+* 排名页面
+* */
 public class RankActivity extends AppCompatActivity {
 
     private LinearLayoutManager layoutManager;
     private RecyclerView recyclerView;
-    private NewsAdapter_test_willbedeleted adapter;
+//    private NewsAdapter_test_willbedeleted adapter;
+    private RankMuseumsAdapter adapter;
+    private ProgressBar progressBar;
     //防止在子线程中更新UI时程序会崩溃，添加了Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
+            progressBar.setVisibility(View.GONE);
             if (msg.what == 1) {
                 recyclerView.setAdapter(adapter) ; //UI更改操作
             }
@@ -51,29 +49,22 @@ public class RankActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rank);
+        progressBar=findViewById(R.id.progressBar_rank);
         recyclerView = findViewById(R.id.recycler_rankpage);
         layoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        //为RecyclerView添加分割线
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
-                recyclerView.getContext(),DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        //         隐藏标题栏
-        ActionBar actionbar = getSupportActionBar();
-        if (actionbar != null) {
-            actionbar.hide();
-        }
-        String url = "http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811";
-        getRankDatas(url);
 
+//        String url = "http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811";
+//        getRankDatas(url);
+        progressBar.setVisibility(View.GONE);
+        adapter = new RankMuseumsAdapter();
+        recyclerView.setAdapter(adapter) ;
         FilterHeadView filterHeadView = findViewById(R.id.filter);
         LinearLayout filter_item1=findViewById(R.id.zonghe);
         filter_item1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 filterHeadView.hide();
-//                String url = "http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811";
-//                getRankDatas(url);
             }
         });
         LinearLayout filter_item2=findViewById(R.id.cishu);
@@ -108,7 +99,7 @@ public class RankActivity extends AppCompatActivity {
                     JSONObject object = Jarray.getJSONObject(i);
                     newsList.add(new News(object.getString("title"), object.getString("thumbnail_pic_s"),object.getString("url")));
                 }
-                adapter = new NewsAdapter_test_willbedeleted(newsList);
+//                adapter = new NewsAdapter_test_willbedeleted(newsList);
                 Message message = new Message();
                 message.what = 1;
                 handler.sendMessage(message);    // 将Message对象发送出去

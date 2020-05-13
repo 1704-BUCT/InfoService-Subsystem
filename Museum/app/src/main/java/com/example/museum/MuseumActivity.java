@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +26,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
+/*
+* 博物馆详细信息页面
+* */
 public class MuseumActivity extends AppCompatActivity {
 
     private List<Fragment> mFragments = new ArrayList<>();
@@ -77,7 +80,7 @@ public class MuseumActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MuseumActivity.this,CommentActivity.class);
-                intent.putExtra("name","故宫博物馆");
+                intent.putExtra("ic_name","故宫博物馆");
                 startActivity(intent);
             }
         });
@@ -92,7 +95,7 @@ public class MuseumActivity extends AppCompatActivity {
                 .setTextId(R.id.item_text)
                 .setSelectedColor(getResources().getColor(R.color.select))
                 .setUnSelectedColor(getResources().getColor(R.color.unselect));
-        flowLayout.setAdapter(new TabFlowAdapter<String>(R.layout.item_msg,mTitle) {
+        flowLayout.setAdapter(new TabFlowAdapter<String>(R.layout.item_tab_inmuseum,mTitle) {
             @Override
             public void bindView(View view, String data, int position) {
                 setText(view,R.id.item_text,data);

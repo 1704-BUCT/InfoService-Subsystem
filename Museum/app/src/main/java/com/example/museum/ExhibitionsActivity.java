@@ -25,8 +25,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ExhibitionActivity extends AppCompatActivity {
+/*
+ * 搜索展览页面
+ * */
+public class ExhibitionsActivity extends AppCompatActivity {
 //    private static final String TAG = "ExhibitionActivity";
     private ExhibitionAdapter adapter;
     private List<Exhibition> museumList = new ArrayList<>();
@@ -52,9 +54,9 @@ public class ExhibitionActivity extends AppCompatActivity {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
-                ExhibitionActivity.this,DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+//                ExhibitionsActivity.this,DividerItemDecoration.VERTICAL);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
 
         Thread thread = new Thread(new Runnable() {
             @Override

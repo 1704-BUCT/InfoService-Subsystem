@@ -45,7 +45,7 @@
         <RelativeLayout
             android:id="@+id/rlContent"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_height="183dp"
             android:background="@color/white">
 
             <LinearLayout
@@ -89,6 +89,64 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="展览次数"
+                    android:textSize="22dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/divier_mask2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cishu">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/divider" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/huanjing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divier_mask2"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="环境"
+                    android:textSize="22dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/divier_mask3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/huanjing">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/divider" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fuwu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divier_mask3"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="服务"
                     android:textSize="22dp" />
             </LinearLayout>
         </RelativeLayout>

@@ -15,11 +15,6 @@ public class NewsActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-        // 隐藏标题栏
-//        ActionBar actionbar = getSupportActionBar();
-//        if (actionbar != null) {
-//            actionbar.hide();
-//        }
         Intent intent=getIntent();
         String URL=intent.getStringExtra("Url");
         LinearLayout view=findViewById(R.id.web_view);
