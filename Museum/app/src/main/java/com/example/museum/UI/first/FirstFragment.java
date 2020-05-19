@@ -61,7 +61,8 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
                 progressBar.setVisibility(View.GONE);
                 //此处用了两个List的副本，来防止在网络数据时用户点击列表项闪退的问题
                 bannarDatas1=new ArrayList<>(bannarDatas);
-                adapter.setNewData(bannarDatas1);
+//                adapterBanner.notifyDataSetChanged();
+                adapterBanner.setDatas(bannarDatas1);
                 newsList1=new ArrayList<>(newsList);
                 adapter.setNewData(newsList1);            // 设置及刷新数据
             }
