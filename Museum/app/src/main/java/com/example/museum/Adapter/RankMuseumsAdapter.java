@@ -47,6 +47,9 @@ public class RankMuseumsAdapter extends RecyclerView.Adapter<RankMuseumsAdapter.
     public RankMuseumsAdapter() {
         museumList = Museum.getTestData();
     }
+    public RankMuseumsAdapter(List<Museum> mMuseumList) {
+        museumList = mMuseumList;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -62,6 +65,14 @@ public class RankMuseumsAdapter extends RecyclerView.Adapter<RankMuseumsAdapter.
                 //在非activity类中使用startActicity只需写成getContext().startActivity(intent)即可
                 Intent intent = new Intent(parent.getContext(), MuseumActivity.class);
 //                intent.putExtra("Url",museumList.get(position).getUrl());
+                intent.putExtra("mid",museum.getMid());
+                intent.putExtra("name",museum.getName());
+                intent.putExtra("introduction",museum.getIntroduction());
+                intent.putExtra("avgstar",museum.getAvgstar());
+                intent.putExtra("opentime",museum.getOpentime());
+                intent.putExtra("address",museum.getAddress());
+                intent.putExtra("imgurl",museum.getImgurl());
+                intent.putExtra("mobile",museum.getMobile());
                 parent.getContext().startActivity(intent);
             }
         });

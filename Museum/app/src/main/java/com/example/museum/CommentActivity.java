@@ -17,9 +17,14 @@ import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
 import com.classichu.lineseditview.LinesEditView;
+import com.example.museum.API.API;
+import com.example.museum.Datas.Comment;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
@@ -45,22 +50,33 @@ public class CommentActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             if(msg.what==1)
-                Snackbar.make(materialRatingBar1, "评价成功", Snackbar.LENGTH_SHORT).show();
+            {
+                Toast.makeText(CommentActivity.this, "评价成功",Toast.LENGTH_SHORT).show();
+                finish();
+            }
             else
-                Snackbar.make(materialRatingBar2, "评价失败，请检查网络情况", Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(CommentActivity.this, "评价失败，请检查网络情况",Toast.LENGTH_SHORT).show();
+//                Snackbar.make(materialRatingBar2, "评价失败，请检查网络情况", Snackbar.LENGTH_SHORT).show();
         }
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+        Intent intent = getIntent();
+        Integer mid=intent.getIntExtra("mid",0);
+        String mname=intent.getStringExtra("mname");
+        String imgurl=intent.getStringExtra("imgurl");
         materialRatingBar1 = findViewById(R.id.ratingbar1);
         materialRatingBar1.setActivated(true);
         materialRatingBar2 = findViewById(R.id.ratingbar2);
         materialRatingBar2.setActivated(true);
         materialRatingBar3 = findViewById(R.id.ratingbar3);
         materialRatingBar3.setActivated(true);
-
+        ImageView imageView = findViewById(R.id.comment_pic);
+        Glide.with(this).load(imgurl).into(imageView);
+        TextView textView = findViewById(R.id.comment_mname);
+        textView.setText(mname);
         ImageView backIcon = findViewById(R.id.backtomuseum);
         backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,21 +92,36 @@ public class CommentActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 new Thread(()->{
-                    int mid=3;
                     //获取当前时间
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// HH:mm:ss
                     Date date = new Date(System.currentTimeMillis());
-                    FormBody formBody = new FormBody.Builder().add("mid","3")
-                            .add("ic_account","333333")
-                            .add("content",linesEditView.getContentText())
-                            .add("environmentstar", String.valueOf(materialRatingBar1.getRating()))
-                            .add("exhibitionstar", String.valueOf(materialRatingBar2.getRating()))
-                            .add("servicestar", String.valueOf(materialRatingBar3.getRating()))
-                            .add("time",simpleDateFormat.format(date))
-                            .build();
-                String state = HttpRequest.Post("http://192.168.5.1:1211/user/comments", formBody);
+//                    FormBody formBody = new FormBody.Builder().add("mid","3")
+//                            .add("ic_account","333333")
+//                            .add("content",linesEditView.getContentText())
+//                            .add("environmentstar", String.valueOf(materialRatingBar1.getRating()))
+//                            .add("exhibitionstar", String.valueOf(materialRatingBar2.getRating()))
+//                            .add("servicestar", String.valueOf(materialRatingBar3.getRating()))
+//                            .add("time",simpleDateFormat.format(date))
+//                            .build();
+                    JSONObject Jobject = new JSONObject();
+                    try {
+                        Jobject.put("uid",1);
+                        Jobject.put("mid",mid);
+                        Jobject.put("environmentstar",materialRatingBar1.getRating());
+                        Jobject.put("exhibitionstar",materialRatingBar2.getRating());
+                        Jobject.put("servicestar",materialRatingBar3.getRating());
+                        Jobject.put("content",linesEditView.getContentText());
+                        Jobject.put("time",simpleDateFormat.format(date).toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    String json=Jobject.toString();
+                String state = HttpRequest.Post(API.uploadComment, json);
                 Message message = new Message();
-                message.what = new Integer(state);
+                if(state.equals("0"))
+                    message.what = 1;
+                else
+                    message.what=0;
                 handler.sendMessage(message);    // 将Message对象发送出去
 
                  }).start();

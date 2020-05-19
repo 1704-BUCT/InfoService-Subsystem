@@ -55,6 +55,7 @@ public class CollectionAdapter_FindingPage extends RecyclerView.Adapter<Collecti
         Collection collection = collecitonList.get(position);
         Glide.with(holder.itemView)
                 .load(collection.getImgurl())
+                .error(R.drawable.pic_null)
                 .into(holder.collectionImage);
         holder.collectionName.setText(collection.getName());
     }

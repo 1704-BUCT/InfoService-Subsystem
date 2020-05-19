@@ -17,6 +17,7 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.*;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.youth.banner.*;
@@ -35,13 +36,15 @@ import okhttp3.*;
     以下内容是对页面组件的设置以及新闻数据的获取
 * */
 public class FirstFragment extends Fragment implements OnPageChangeListener {
-    private  RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
+
     private ProgressBar progressBar;
     private NewsAdapter adapter;
-    private Banner banner;
     private List<News> bannarDatas;
     private TextView textView;
+    private List<News> newsList;
+    private BannerImageNetAdapter adapterBanner;
+    private SwipeRefreshLayout swipeRefresh;
+    private Integer page=0;
     //防止在子线程中更新UI时程序会崩溃，添加了Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
@@ -49,17 +52,9 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
                 progressBar.setVisibility(View.GONE);
-                //设置适配器
-                banner.setAdapter(new BannerImageNetAdapter(bannarDatas));
-                //设置点击事件
-                banner.setOnBannerListener((data, position) -> {
-                    //转到新闻页面，并传递存储新闻的数组下标给该页面
-                    Intent intent = new Intent(getContext(), NewsActivity.class);
-//                intent.putExtra("Index",position);
-                    intent.putExtra("Url",bannarDatas.get(position).getUrl());
-                    startActivity(intent);
-                });
-                recyclerView.setAdapter(adapter) ; //UI更改操作
+                adapter.notifyDataSetChanged();
+                adapterBanner.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
             }
             else
             {
@@ -72,52 +67,51 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_firstpage, container, false);
-        banner = root.findViewById(R.id.banner);
+        Banner banner = root.findViewById(R.id.banner);
         bannarDatas = new ArrayList<>();
+        newsList = new ArrayList<>();
         //设置指示器
-        banner.setIndicator(new CircleIndicator(getContext()));
-
+        banner.setIndicator(new CircleIndicator(banner.getContext()));
         //添加切换监听
         banner.addOnPageChangeListener(this);
         //圆角
         banner.setBannerRound(BannerUtils.dp2px(5));
-        recyclerView = (RecyclerView)root.findViewById(R.id.recycler_firstview);
-        layoutManager = new LinearLayoutManager(recyclerView.getContext());
+        //设置适配器
+
+        adapterBanner=new BannerImageNetAdapter(bannarDatas);
+        banner.setAdapter(adapterBanner);
+
+
+        //设置点击事件
+        banner.setOnBannerListener((data, position) -> {
+            //转到新闻页面，并传递存储新闻的数组下标给该页面
+            Intent intent = new Intent(getContext(), NewsActivity.class);
+            intent.putExtra("Url",newsList.get(position).getUrl());
+            startActivity(intent);
+        });
+
+        RecyclerView recyclerView = (RecyclerView)root.findViewById(R.id.recycler_firstview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(layoutManager);
         //为RecyclerView添加分割线
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
                 getContext(),DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        // 从服务器获取后台数据
-        List<News> newsList = new ArrayList<>();
-        new Thread(()->{
-            Message message = new Message();
-            try{
-//                String jsonData = HttpRequest.Get("http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811");
-                String jsonData = HttpRequest.Get(API.SHOW_ALLNews);
-//                JSONObject Jobject = new JSONObject(jsonData);
-//                JSONArray Jarray = Jobject.getJSONObject("result").getJSONArray("data");
-                JSONArray Jarray = new JSONArray(jsonData);
-                for (int i = 0; i < Jarray.length(); i++) {
-                    JSONObject object = Jarray.getJSONObject(i);
-                    if (i < 3)
-                        bannarDatas.add(new News(object.getString("title"), object.getString("imgurl"), object.getString("url")));
-                    else
-//                    newsList.ic_add(new News(object.getString("title"), object.getString("thumbnail_pic_s"),object.getString("url")));
-                        newsList.add(new News(object.getString("title"), object.getString("imgurl"), object.getString("url"), object.getString("author"), object.getString("releasetime"), object.getInt("nature")));
-                }
-                progressBar = root.findViewById(R.id.progressBar2);
-                adapter = new NewsAdapter(newsList);
-                message.what = 1;
-                handler.sendMessage(message);    // 将Message对象发送出去
-            }catch(JSONException e){
-                progressBar = root.findViewById(R.id.progressBar2);
-                textView=root.findViewById(R.id.news_error);
-                message.what = 0;
-                handler.sendMessage(message);    // 将Message对象发送出去
-                e.printStackTrace();
-            }}).start();
+
+        swipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.
+                OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshNews(API.showAllNews);
+            }
+        });
+        progressBar = root.findViewById(R.id.progressBar2);
+        adapter = new NewsAdapter(newsList);
+        recyclerView.setAdapter(adapter);
+        textView=root.findViewById(R.id.news_error);
+        refreshNews(API.showAllNews);
         return root;
     }
     @Override
@@ -131,5 +125,44 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+    // 从服务器获取后台数据
+    void refreshNews(String url){
+
+        new Thread(()->{
+            if(bannarDatas.size()>=3)
+            {
+                newsList.add(0,bannarDatas.get(2));
+                newsList.add(0,bannarDatas.get(1));
+                newsList.add(0,bannarDatas.get(0));
+                bannarDatas.clear();
+            }
+
+            Message message = new Message();
+            try{
+                String jsonData = HttpRequest.Get(API.showAllNews+"?page="+page.toString());
+                JSONObject jsonObject=new JSONObject(jsonData);
+                JSONArray Jarray = jsonObject.getJSONArray("content");
+                for (int i = 0; i < Jarray.length(); i++) {
+                    JSONObject object = Jarray.getJSONObject(i);
+//                    if (i < 3 )
+//                        bannarDatas.add(new News(object.getString("title"), object.getString("imgurl"), object.getString("url")));
+//                    else
+                        newsList.add(0,new News(object.getString("title"), object.getString("imgurl"), object.getString("url"), object.getString("author"), object.getString("releasetime"), object.getInt("nature")));
+                }
+                bannarDatas.add(newsList.get(2));
+                bannarDatas.add(newsList.get(1));
+                bannarDatas.add(newsList.get(0));
+                newsList.remove(0);
+                newsList.remove(0);
+                newsList.remove(0);
+                page++;
+                message.what = 1;
+                handler.sendMessage(message);    // 将Message对象发送出去
+            }catch(JSONException e){
+                message.what = 0;
+                handler.sendMessage(message);    // 将Message对象发送出去
+                e.printStackTrace();
+            }}).start();
     }
 }

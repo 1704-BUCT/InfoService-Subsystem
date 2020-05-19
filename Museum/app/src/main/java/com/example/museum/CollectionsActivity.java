@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.museum.API.API;
 import com.example.museum.Adapter.CollectionAdapter;
 import com.example.museum.Datas.Collection;
 
@@ -62,17 +63,24 @@ public class CollectionsActivity extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String str = HttpRequest.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + "湖北");
+//                String str = HttpRequest.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + "湖北");
+                String str = HttpRequest.Get(API.showAllColllections+"?page=0");
                 try {
-                    JSONArray data = new JSONObject(str).getJSONArray("newslist");
-                    JSONObject item;
+//                    JSONArray data = new JSONObject(str).getJSONArray("newslist");
+                    JSONObject jsonObject=new JSONObject(str);
+                    JSONArray data = jsonObject.getJSONArray("content");
+
+//                    JSONObject item;
                     for(int i=0;i<data.length();i++){
-                        item = data.getJSONObject(i);
-                        antiqueList.add(new Collection(i,item.getString("title"),item.getString("picUrl"),item.getString("source")));
+//                        item = data.getJSONObject(i);
+                        JSONObject object=data.getJSONObject(i);
+                        antiqueList.add(new Collection(object.getInt("cid"),object.getString("name"),object.getString("imgurl"),object.getString("mid")));
+//                        antiqueList.add(new Collection(i,item.getString("title"),item.getString("picUrl"),item.getString("source")));
                     }
                     Message message = Message.obtain();
                     message.what = 1;
                     handler.sendMessage(message);
+
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
@@ -85,6 +93,7 @@ public class CollectionsActivity extends AppCompatActivity {
             actionbar.hide();
         }
         SearchView searchView = (SearchView) findViewById(R.id.search_exhibition);
+        searchView.setQueryHint("请输入藏品名称");
         searchView.setIconified(false);         //展开搜索得内容
         searchView.setSubmitButtonEnabled(true);//显示提交按钮
         searchView.onActionViewExpanded();      //当展开无输入内容的时候，没有关闭的图标
@@ -98,6 +107,7 @@ public class CollectionsActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 //                        String str = Http.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + query);
+//                        String str = HttpRequest.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + "河北");
                         String str = HttpRequest.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + "河北");
                         try {
                             JSONArray data = new JSONObject(str).getJSONArray("newslist");
@@ -105,6 +115,7 @@ public class CollectionsActivity extends AppCompatActivity {
                             antiqueList.clear();
                             for(int i=0;i<data.length();i++){
                                 item = data.getJSONObject(i);
+
                                 antiqueList.add(new Collection(i,item.getString("title"),item.getString("picUrl"),item.getString("source")));
                             }
                             Message message = Message.obtain();

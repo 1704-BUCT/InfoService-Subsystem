@@ -1,5 +1,6 @@
 package com.example.museum.Adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class BannerImageNetAdapter extends BannerAdapter<News, BannerImageHolder
         return holder;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindView(BannerImageHolder holder, News data, int position, int size) {
         if(data.getImgurl().equals("") || data.getImgurl()==null)
@@ -42,14 +44,16 @@ public class BannerImageNetAdapter extends BannerAdapter<News, BannerImageHolder
             //可以加载网络图片的一个依赖
             Glide.with(holder.itemView)
                     .load(R.drawable.news_picnull)
+                    .error(R.drawable.news_picnull)
                     .into(holder.imageView);
         }
         else
         Glide.with(holder.itemView)
                 .load(data.getImgurl())
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
+                .error(R.drawable.news_picnull)
                 .into(holder.imageView);
-        holder.textView.setText(data.getTitle());
+
     }
 
 }

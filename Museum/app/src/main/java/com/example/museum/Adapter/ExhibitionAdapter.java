@@ -67,6 +67,7 @@ public class ExhibitionAdapter extends RecyclerView.Adapter<ExhibitionAdapter.Vi
         Exhibition antique = exhibitionList.get(position);
         Glide.with(holder.itemView)
                 .load(antique.getImgurl())
+                .error(R.drawable.pic_null)
                 .into(holder.exhibitionImage);
         holder.exhibitionName.setText(antique.getName());
         holder.museumName.setText(antique.getMname());

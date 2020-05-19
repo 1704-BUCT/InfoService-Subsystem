@@ -13,6 +13,16 @@ public class Museum {
     double avgenvironmentstar;
     double avgexhibitionstar;
     double avgservicestar;
+    String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     double avgstar;
     String introduction;
     String opentime;
@@ -24,6 +34,20 @@ public class Museum {
         this.imgurl = imgurl;
         this.name = name;
         this.avgstar = star;
+    }
+
+    public Museum(Integer mid, String imgurl, String name, double avgenvironmentstar, double avgexhibitionstar, double avgservicestar, String address, double avgstar, String introduction, String opentime, String mobile) {
+        this.mid = mid;
+        this.imgurl = imgurl;
+        this.name = name;
+        this.avgenvironmentstar = avgenvironmentstar;
+        this.avgexhibitionstar = avgexhibitionstar;
+        this.avgservicestar = avgservicestar;
+        this.address = address;
+        this.avgstar = avgstar;
+        this.introduction = introduction;
+        this.opentime = opentime;
+        this.mobile = mobile;
     }
 
     public double getAvgenvironmentstar() {

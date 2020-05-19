@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    app:contentPaddingRight="16dp"
-    app:contentPaddingLeft="16dp"
+    app:contentPaddingRight="10dp"
+    app:contentPaddingLeft="10dp"
     app:contentPaddingTop="15dp"
     app:contentPaddingBottom="25dp"
     >
@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent">
-
         <com.zhengsr.tablib.view.flow.TabFlowLayout
             android:id="@+id/rectflow"
             android:layout_height="wrap_content"

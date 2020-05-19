@@ -1,7 +1,12 @@
 package com.example.museum.Datas;
 
+
+
+import android.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /*
@@ -115,4 +120,5 @@ public class News {
         list.add(new News(10,"博物馆之夜10","https://img.zcool.cn/community/0148fc5e27a173a8012165184aad81.jpg"));
         return list;
     }
+
 }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.museum.API.API;
 import com.example.museum.Adapter.ExhibitionAdapter;
 import com.example.museum.Datas.Exhibition;
 
@@ -48,26 +49,28 @@ public class ExhibitionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exhibition);
-
         adapter= new ExhibitionAdapter(museumList);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_exhibition);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
-//                ExhibitionsActivity.this,DividerItemDecoration.VERTICAL);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String str = HttpRequest.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + "湖北");
+//                String str = HttpRequest.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + "湖北");
+                String str = HttpRequest.Get(API.showAllExhibitions+"?page=0");
+
                 try {
-                    JSONArray data = new JSONObject(str).getJSONArray("newslist");
+//                    JSONArray data = new JSONObject(str).getJSONArray("newslist");
+                    JSONObject jsonObject=new JSONObject(str);
+                    JSONArray data = jsonObject.getJSONArray("content");
+
                     JSONObject item;
                     for(int i=0;i<data.length();i++){
                         item = data.getJSONObject(i);
-                        museumList.add(new Exhibition(i,item.getString("title"),item.getString("picUrl"),item.getString("source")));
+//                        museumList.add(new Exhibition(i,item.getString("title"),item.getString("picUrl"),item.getString("source")));
+                        museumList.add(new Exhibition(item.getInt("eid"),item.getString("name"),item.getString("imgurl"),item.getString("mname")));
                     }
                     Message message = Message.obtain();
                     message.what = 1;
@@ -84,6 +87,7 @@ public class ExhibitionsActivity extends AppCompatActivity {
             actionbar.hide();
         }
         SearchView searchView = (SearchView) findViewById(R.id.search_exhibition);
+        searchView.setQueryHint("请输入展览名称");
         searchView.setIconified(false);         //展开搜索得内容
         searchView.setSubmitButtonEnabled(true);//显示提交按钮
         searchView.onActionViewExpanded();      //当展开无输入内容的时候，没有关闭的图标
@@ -98,6 +102,8 @@ public class ExhibitionsActivity extends AppCompatActivity {
                     public void run() {
 //                        String str = Http.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + query);
                         String str = HttpRequest.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + "河北");
+//                        String str = HttpRequest.Get(API.showAllExhibitions);
+
                         try {
                             JSONArray data = new JSONObject(str).getJSONArray("newslist");
                             JSONObject item;

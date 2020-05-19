@@ -53,8 +53,10 @@ public class EducationsAdapter  extends RecyclerView.Adapter<EducationsAdapter .
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 EducationActivity education = educationActivities.get(position);
+
                 //在非activity类中使用startActicity只需写成getContext().startActivity(intent)即可
                 Intent intent = new Intent(parent.getContext(), com.example.museum.EducationActivity.class);
+                intent.putExtra("id",education.getId());
 //                intent.putExtra("Url",mNewsList.get(position).getUrl());
                 parent.getContext().startActivity(intent);
             }
@@ -68,6 +70,7 @@ public class EducationsAdapter  extends RecyclerView.Adapter<EducationsAdapter .
         EducationActivity educations = educationActivities.get(position);
         Glide.with(holder.itemView)
                 .load(educations.getImgurl())
+                .error(R.drawable.pic_null)
                 .into(holder.educaitonImage);
         holder.educationName.setText(educations.getName());
         holder.educationTime.setText(educations.getTime());

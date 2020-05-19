@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="25dp"
+        app:backgroundTint="#0E850E"
         app:srcCompat="@drawable/ic_add" />
 
     <androidx.core.widget.NestedScrollView

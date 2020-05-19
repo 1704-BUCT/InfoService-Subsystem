@@ -38,13 +38,18 @@
                 android:text="藏品"
                 android:textSize="20sp"/>
 
-            <Space
-                android:layout_width="228dp"
-                android:layout_height="match_parent"
-                />
+<!--            <Space-->
+<!--                android:layout_width="228dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                />-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="25dp"
                 android:orientation="horizontal"
                 android:id="@+id/part_more2">
                 <TextView

@@ -15,10 +15,8 @@ import com.example.museum.R;
 * */
 public class BannerImageHolder extends RecyclerView.ViewHolder {
     public ImageView imageView;
-    public TextView textView;
     public BannerImageHolder(@NonNull View view) {
         super(view);
         this.imageView = (ImageView) view.findViewById(R.id.image);
-        this.textView = (TextView) view.findViewById(R.id.banner_news_title);
     }
 }

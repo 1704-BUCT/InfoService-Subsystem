@@ -65,6 +65,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
         Collection antique = antiqueList.get(position);
         Glide.with(holder.itemView)
                 .load(antique.getImgurl())
+                .error(R.drawable.pic_null)
                 .into(holder.image);
         holder.name.setText(antique.getName());
         holder.mname.setText(antique.getMname());

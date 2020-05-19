@@ -12,10 +12,11 @@
         android:layout_width="367dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
         android:background="@drawable/border"
         android:queryHint="博物馆名称"
         android:visibility="visible"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="10dp"/>
 <!--    <ProgressBar-->
 <!--        android:id="@+id/progress"-->
 <!--        android:layout_width="match_parent"-->

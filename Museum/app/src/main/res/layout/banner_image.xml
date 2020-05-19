@@ -8,12 +8,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
-    <TextView
-        android:id="@+id/banner_news_title"
-        android:layout_width="220dp"
-        android:layout_height="150dp"
-        android:textColor="@color/white"
-        android:layout_centerInParent="true"
-        android:textSize="25dp"
-        android:text="微博之夜"/>
 </RelativeLayout>

@@ -17,6 +17,9 @@ import com.example.museum.NewsActivity;
 import com.example.museum.R;
 import com.kaelli.niceratingbar.NiceRatingBar;
 import com.kaelli.niceratingbar.OnRatingChangedListener;
+
+import org.json.JSONObject;
+
 import java.util.List;
 
 
@@ -43,30 +46,31 @@ public class MuseumsAdapter extends RecyclerView.Adapter<MuseumsAdapter.ViewHold
     public MuseumsAdapter() {
         museumList = Museum.getTestData();
     }
-
+    public MuseumsAdapter(List<Museum> mMuseumList) {
+        museumList = mMuseumList;
+    }
+    
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycleritem_museumsview, parent,
                         false);
         ViewHolder holder = new ViewHolder(view);
-        holder.niceRatingBar.setOnRatingChangedListener(new OnRatingChangedListener() {
-            @Override
-            public void onRatingChanged(float rating) {
-//                Toast.makeText(parent.getContext(),rate.toString(),Toast.LENGTH_SHORT).show();
-                // 在这里，得到的rating值就是用户通过点击/滑动，给的评分了，可以把这个值传递到服务端
-            }
-        });
         holder.museumview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 Museum museum = museumList.get(position);
-//                Toast.makeText(v.getContext(), "you clicked view " + news.getName(),
-//                        Toast.LENGTH_SHORT).show();
                 //在非activity类中使用startActicity只需写成getContext().startActivity(intent)即可
                 Intent intent = new Intent(parent.getContext(), MuseumActivity.class);
-//                intent.putExtra("Url",museumList.get(position).getUrl());
+                intent.putExtra("mid",museum.getMid());
+                intent.putExtra("name",museum.getName());
+                intent.putExtra("introduction",museum.getIntroduction());
+                intent.putExtra("avgstar",museum.getAvgstar());
+                intent.putExtra("opentime",museum.getOpentime());
+                intent.putExtra("address",museum.getAddress());
+                intent.putExtra("imgurl",museum.getImgurl());
+                intent.putExtra("mobile",museum.getMobile());
                 parent.getContext().startActivity(intent);
             }
         });

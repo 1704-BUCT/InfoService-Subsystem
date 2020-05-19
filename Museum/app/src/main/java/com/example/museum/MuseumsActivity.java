@@ -11,6 +11,8 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,11 +24,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.museum.API.API;
 import com.example.museum.Adapter.MuseumsAdapter;
+import com.example.museum.Datas.Museum;
 import com.example.museum.SQLite.RecordsDao;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +50,25 @@ import io.reactivex.schedulers.Schedulers;
 * */
 public class MuseumsActivity extends AppCompatActivity {
 
+    private  MuseumsAdapter adapter;
     private RecordsDao mRecordsDao;
     //默然展示词条个数
     private final int DEFAULT_RECORD_NUMBER = 10;
     private List<String> recordList = new ArrayList<>();
     private TagAdapter mRecordsAdapter;
     private LinearLayout mHistoryContent;
+    private  RecyclerView recyclerView;
+    private List<Museum> museumList;
+    //防止在子线程中更新UI时程序会崩溃，添加了Handler
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+              adapter.notifyDataSetChanged();//UI更改操作
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +88,7 @@ public class MuseumsActivity extends AppCompatActivity {
         ImageView clearSearch = findViewById(R.id.iv_clear_search);
         mHistoryContent = findViewById(R.id.ll_history_content);
         initData();
+        museumList = new ArrayList<>();
         backToHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,15 +106,15 @@ public class MuseumsActivity extends AppCompatActivity {
              */
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Log.e("多行监听", actionId + "\t" + KeyEvent.KEYCODE_ENTER);
                 String record = editText.getText().toString();
                 if (!TextUtils.isEmpty(record)) {
-                    Intent intent = new Intent(MuseumsActivity.this,MuseumActivity.class);
-                    //向下个页面传递博物馆名字的参数,方便下页进行查询
-                    intent.putExtra("museum_name",record);
-                    startActivity(intent);
+                    getMuseums(API.getPartMuseumByName+record);
                     //添加数据
                     mRecordsDao.addRecords(record);
+                }
+                else
+                {
+                    getMuseums(API.showAllMuseums);
                 }
                 return event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER);
             }
@@ -183,9 +205,7 @@ public class MuseumsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String record = editText.getText().toString();
                 if (!TextUtils.isEmpty(record)) {
-                    Intent intent = new Intent(MuseumsActivity.this,MuseumActivity.class);
-                    intent.putExtra("museum_name",record);
-                    startActivity(intent);
+                    getMuseums(API.getPartMuseumByName+record);
                     //添加数据
                     mRecordsDao.addRecords(record);
                 }
@@ -204,57 +224,40 @@ public class MuseumsActivity extends AppCompatActivity {
                 initData();
             }
         });
-        // 隐藏标题栏
-//        ActionBar actionbar = getSupportActionBar();
-//        if (actionbar != null) {
-//            actionbar.hide();
-//        }
-
-        // 搜索框的一些属性设置
-//        SearchView searchView = (SearchView)findViewById(R.id.search_museum);
-//        searchView.setIconified(false);          //展开搜索的内容提示
-//        searchView.setSubmitButtonEnabled(true);//显示提交按钮
-//        searchView.onActionViewExpanded();      //当展开无输入内容的时候，没有关闭的图标
-//        searchView.setIconifiedByDefault(false);//默认为true在框内，设置false则在框外
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                //提交按钮的点击事件，这里应该是根据query即博物馆名称作为关键字进行查询
-//                //此处需要第五小组的api,需要把博物馆的信息存到museum对象中，再作为参数传递给博物馆具体信息页面
-//                searchView.clearFocus();  //可以收起键盘
-//                return true;
-//            }
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-////            @Override
-////            public boolean onQueryTextChange(String newText) {
-//                //当输入框内容改变的时候回调
-////                Log.i(TAG,"内容: " + newText);
-////                return true;
-////            }
-//        });
-//        //去掉搜索框的下划线
-//        View viewById1 = searchView.findViewById(searchView.getContext().getResources().getIdentifier("android:id/search_plate",null,null));
-//        if (viewById1 != null) {
-//            viewById1.setBackgroundColor(Color.TRANSPARENT);
-//        }
-//        //去掉搜索框提交箭头下面的下划线
-//        View viewById2 = searchView.findViewById(searchView.getContext().getResources().getIdentifier("android:id/submit_area",null,null));
-//        if (viewById2 != null) {
-//            viewById2.setBackgroundColor(Color.TRANSPARENT);
-//        }
 
         //卡片式布局显示博物馆列表
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_museumsviews);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_museumsviews);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
-        MuseumsAdapter adapter= new MuseumsAdapter();
+        adapter = new MuseumsAdapter(museumList);
         recyclerView.setAdapter(adapter);
-
-
+        getMuseums(API.showAllMuseums+"?page=0");
     }
+
+    private void getMuseums(String url) {
+        new Thread(()->{
+            museumList.clear();
+            try {
+                String jsonData = HttpRequest.Get(url);
+                JSONObject jsonObject=new JSONObject(jsonData);
+                JSONArray Jarray = jsonObject.getJSONArray("content");
+                for (int i = 0; i < Jarray.length(); i++) {
+                    JSONObject object = Jarray.getJSONObject(i);
+                    museumList.add(new Museum(object.getInt("mid"),object.getString("imgurl"),object.getString("name"),
+                            object.getDouble("avgenvironmentstar"),object.getDouble("avgexhibitionstar"),object.getDouble("avgservicestar"),
+                            object.getString("address"),object.getDouble("avgstar"),
+                            object.getString("introduction"),object.getString("opentime"),object.getString("mobile")));
+                }
+                Message message=new Message();
+                message.what = 1;
+                handler.sendMessage(message);    // 将Message对象发送出去
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }).start();
+    }
+
     private void showDialog(String dialogTitle, @NonNull DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MuseumsActivity.this);
         builder.setMessage(dialogTitle);

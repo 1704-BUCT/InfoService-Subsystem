@@ -28,15 +28,19 @@ android:background="#fff">
             android:textStyle="bold"
             android:textColor="@color/textTitle"/>
     </LinearLayout>
+
     <ImageView
         android:id="@+id/setting"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_setting"
-        android:layout_margin="5dp"
+        android:layout_height="20dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:paddingRight="24dp"/>
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:paddingRight="24dp"
+        android:src="@drawable/ic_setting" />
 </RelativeLayout>
 
 <LinearLayout
@@ -58,13 +62,14 @@ android:background="#fff">
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="YOUNG ONE"
+            android:text="请点击登陆"
             android:textStyle="bold"
             android:textSize="20dp"
             android:layout_margin="10dp"
             android:textColor="#000"/>
 
         <LinearLayout
+            android:id="@+id/show_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

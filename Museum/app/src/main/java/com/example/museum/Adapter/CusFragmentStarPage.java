@@ -97,7 +97,7 @@ public class CusFragmentStarPage extends Fragment {
             layoutManager = new LinearLayoutManager(recyclerView.getContext());
             recyclerView.setLayoutManager(layoutManager);
             progressBar=view.findViewById(R.id.progressBarinMuseum);
-            getNews(API.SHOW_ALLNews);
+            getNews(API.showAllNews);
         }
         if(bundle.getString(ARGUMENT_KEY).equals("教育"))
         {

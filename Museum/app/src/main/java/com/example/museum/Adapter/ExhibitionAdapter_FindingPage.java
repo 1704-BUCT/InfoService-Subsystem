@@ -36,6 +36,10 @@ public class ExhibitionAdapter_FindingPage extends RecyclerView.Adapter<Exhibiti
         exhibitionList = Exhibition.getTestDatas();
     }
 
+    public ExhibitionAdapter_FindingPage(List<Exhibition> mExhibitionsList) {
+        exhibitionList = mExhibitionsList;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -49,6 +53,7 @@ public class ExhibitionAdapter_FindingPage extends RecyclerView.Adapter<Exhibiti
         Exhibition exhibition = exhibitionList.get(position);
         Glide.with(holder.itemView)
                 .load(exhibition.getImgurl())
+                .error(R.drawable.pic_null)
                 .into(holder.exhibitionImage);
         holder.exhibitionName.setText(exhibition.getName());
     }

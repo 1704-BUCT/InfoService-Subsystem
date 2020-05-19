@@ -35,5 +35,4 @@
         <activity android:name=".CollectionsActivity" />
         <activity android:name=".ExhibitionsActivity" />
     </application>
-
 </manifest>
