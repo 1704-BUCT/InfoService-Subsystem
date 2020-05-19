@@ -23,7 +23,7 @@ import java.util.List;
 public class MyStars extends AppCompatActivity {
 
     private List<Fragment> mFragments = new ArrayList<>();
-    private List<String> mTitle = new ArrayList<>(Arrays.asList("展览 藏品 教育 新闻".split(" ")));
+    private List<String> mTitle = new ArrayList<>(Arrays.asList("展览 藏品 教育".split(" ")));
     private MyViewPager mViewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

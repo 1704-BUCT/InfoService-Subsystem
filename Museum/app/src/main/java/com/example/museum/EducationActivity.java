@@ -13,11 +13,11 @@ import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.museum.API.API;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +49,10 @@ public class EducationActivity extends AppCompatActivity {
                 Glide.with(getBaseContext()).load(educationActivity.getImgurl()).into(imageView);
                 TextView educationIntroduction = (TextView) findViewById(R.id.expandable_text_education);
                 educationIntroduction.setText(educationActivity.getIntroduction());
-
+            }
+            else
+            {
+                Toast.makeText(EducationActivity.this,"数据加载失败，请检查您的网络",Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -79,26 +82,35 @@ public class EducationActivity extends AppCompatActivity {
         Intent intent=getIntent();
         Integer id=intent.getIntExtra("id",0);
         new Thread(()->{
+            Message message= new Message();
             String str=HttpRequest.Get(API.findEducationsById+id.toString());
-            try {
-                JSONArray jsonArray = new JSONArray(str);
-                educationActivity=new com.example.museum.Datas.EducationActivity();
-                for(int i=0;i<jsonArray.length();i++)
-                {
-                    JSONObject jsonObject=jsonArray.getJSONObject(i);
-                    educationActivity.setId(jsonObject.getInt("eid"));
-                    educationActivity.setName(jsonObject.getString("name"));
-                    educationActivity.setImgurl(jsonObject.getString("imgurl"));
-                    educationActivity.setTime(jsonObject.getString("time"));
-                    educationActivity.setMname(jsonObject.getString("mname"));
-                    educationActivity.setIntroduction(jsonObject.getString("introduction"));
-                }
-                Message message= new Message();
-                message.what=1;
-                handler.sendMessage(message) ;
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(str==null)
+            {
+                message.what=0;
             }
+            else
+            {
+                try {
+                    JSONObject jsonObject=new JSONObject(str);
+                    JSONArray jsonArray = jsonObject.getJSONArray("content");
+                    educationActivity=new com.example.museum.Datas.EducationActivity();
+                    for(int i=0;i<jsonArray.length();i++)
+                    {
+                        JSONObject item=jsonArray.getJSONObject(i);
+                        educationActivity.setId(item.getInt("eid"));
+                        educationActivity.setName(item.getString("name"));
+                        educationActivity.setImgurl(item.getString("imgurl"));
+                        educationActivity.setTime(item.getString("time"));
+                        educationActivity.setMname(item.getString("mname"));
+                        educationActivity.setIntroduction(item.getString("introduction"));
+                    }
+                    message.what=1;
+                } catch (JSONException e) {
+                    message.what=0;
+                    e.printStackTrace();
+                }
+            }
+            handler.sendMessage(message) ;
         }).start();
 
 

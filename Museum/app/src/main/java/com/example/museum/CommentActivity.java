@@ -115,15 +115,26 @@ public class CommentActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    Message message = new Message();
                     String json=Jobject.toString();
-                String state = HttpRequest.Post(API.uploadComment, json);
-                Message message = new Message();
-                if(state.equals("0"))
-                    message.what = 1;
-                else
-                    message.what=0;
+                     String state = HttpRequest.Post(API.uploadComment, json);
+                     if(state==null)
+                         message.what=0;
+                     else
+                     {
+                         try {
+                             JSONObject jsonObject=new JSONObject(state);
+                             String status=jsonObject.getString("status");
+                             if(status.equals("1"))
+                                 message.what = 1;
+                             else
+                                 message.what=0;
+                         } catch (JSONException e) {
+                             message.what=0;
+                             e.printStackTrace();
+                         }
+                     }
                 handler.sendMessage(message);    // 将Message对象发送出去
-
                  }).start();
 
             }

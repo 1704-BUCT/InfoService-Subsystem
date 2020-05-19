@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--发现页面内的博物馆部分-->
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="20dp"
     app:contentPaddingRight="10dp"
     app:contentPaddingLeft="25dp"
@@ -40,9 +40,6 @@
                 android:text="热门博物馆"
                 android:textSize="20sp"/>
 
-<!--            <Space-->
-<!--                android:layout_width="162dp"-->
-<!--                android:layout_height="match_parent" />-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -66,12 +63,12 @@
                     android:layout_gravity="center_vertical"/>
             </LinearLayout>
         </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
+        <me.jingbin.library.ByRecyclerView
             android:id="@+id/recycler_findingpart3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="-22dp"
-            android:orientation="horizontal"
-            />
+            android:layout_marginStart="-25dp"
+            tools:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/recycleritem_museumsview" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

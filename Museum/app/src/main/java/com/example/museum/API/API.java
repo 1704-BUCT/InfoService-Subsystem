@@ -16,7 +16,7 @@ public class API {
     public final static String showMuseumSortByAvgexhibitstar=BASE_URL+"/museum/findAll/sortByAvgexhibitionstar";
     public final static String showMuseumSortByAvgservicestar=BASE_URL+"/museum/findAll/sortByAvgservicestar";
     public final static String showMuseumSortByNum= BASE_URL+"/museum/findAll/sortByExhibitionNums";
-    public final static String getPartMuseumByName=BASE_URL+"/museum/searchByName/";
+    public final static String getPartMuseumByName=BASE_URL+"museum/searchByName/";
 
     public final static  String showAllEducations=BASE_URL+"education/findAll";
     public final static  String museumEducations=BASE_URL+"education/findByMname/";
@@ -35,4 +35,9 @@ public class API {
     public final static String signup=BASE_URL+"user/signup";
     public final static String uploadComment=BASE_URL+"/comment/upload";
     public final static String isAlreadyComment=BASE_URL+"/comment/already/";
+    public final static String commentsInMuseum=BASE_URL+"/comment/findByMid/";
+
+    public final static String starExhibition=BASE_URL+"/star/findStarExhibition/";
+    public final static String starCollection=BASE_URL+"/star/findStarCollection/";
+    public final static String starEducation=BASE_URL+"/star/findStarEducation/";
 }

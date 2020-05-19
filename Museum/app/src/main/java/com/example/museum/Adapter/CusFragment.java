@@ -1,16 +1,12 @@
 package com.example.museum.Adapter;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Layout;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -23,13 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.museum.API.API;
 import com.example.museum.Datas.Collection;
+import com.example.museum.Datas.Comment;
 import com.example.museum.Datas.EducationActivity;
 import com.example.museum.Datas.Exhibition;
 import com.example.museum.Datas.News;
-import com.example.museum.Datas.TrafficRule;
 import com.example.museum.HttpRequest;
 import com.example.museum.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +32,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.jingbin.library.decoration.SpacesItemDecoration;
 
 
 /*
@@ -46,6 +43,7 @@ public class CusFragment extends Fragment {
     //传递tab的title
     public static final String ARGUMENT_KEY = "tab_title";
     public static final String ARGUMENT_KEY2 = "mname";
+    private static final String ARGUMENT_KEY3 = "mid";
     private LinearLayout label;
     private Button buttonAll;
     private Button buttonPos;
@@ -59,6 +57,7 @@ public class CusFragment extends Fragment {
     private CollectionAdapter adapter2;
     private EducationsAdapter adapter3;
     private NewsAdapter adapter4;
+    private CommentAdapter adapter5;
     private Integer pagenum_exhibit=0;
     private Integer pagenum_collection=0;
     private Integer pagenum_educaition=0;
@@ -68,6 +67,7 @@ public class CusFragment extends Fragment {
     private  List<Collection> collectionsList = new ArrayList<>();
     private  List<News> newsList = new ArrayList<>();
     private  List<EducationActivity> educationActivities = new ArrayList<>();
+    private  List<Comment> commentList = new ArrayList<>();
     //防止在子线程中更新UI时程序会崩溃，添加了Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
@@ -112,6 +112,12 @@ public class CusFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                     break;
                 case 5:
+                    adapter5.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                    if(commentList.isEmpty())
+                        textView.setText("此处暂时没有信息");
+                    else
+                        textView.setText("已到达底部~");
                     break;
                 case 0:
                     textView.setText("数据加载失败，请检查网络");
@@ -135,8 +141,9 @@ public class CusFragment extends Fragment {
         textView =view.findViewById(R.id.item_tab1);
         RecyclerView  recyclerView = (RecyclerView)view.findViewById(R.id.recyclerview_inmuseum);
         progressBar=view.findViewById(R.id.progressBarinMuseum);
-        //获取博物馆名字
+        //获取博物馆名字和id
         String mname=bundle.getString(ARGUMENT_KEY2);
+        Integer mid=bundle.getInt(ARGUMENT_KEY3);
         buttonAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,7 +174,7 @@ public class CusFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 buttonAll.setBackground(getResources().getDrawable(R.drawable.button_unselect));
-                buttonPos.setHintTextColor(getResources().getColor(R.color.select_color));
+                buttonAll.setHintTextColor(getResources().getColor(R.color.select_color));
                 buttonPos.setBackground(getResources().getDrawable(R.drawable.button_unselect));
                 buttonPos.setHintTextColor(getResources().getColor(R.color.select_color));
                 buttonNeg.setBackground(getResources().getDrawable(R.drawable.button_select));
@@ -183,25 +190,43 @@ public class CusFragment extends Fragment {
         {
             adapter1 = new ExhibitionAdapter(exhibitionsList);
             recyclerView.setAdapter(adapter1);
-            getExhibitions(API.museumExhibitions+mname+"?page="+pagenum_exhibit.toString());
+            getExhibitions(API.museumExhibitions+mname+"?page="+pagenum_exhibit.toString()+"?size=100");
         }
         if(bundle.getString(ARGUMENT_KEY).equals("藏品"))
         {
             adapter2 = new CollectionAdapter(collectionsList);
             recyclerView.setAdapter(adapter2) ;
-            getCollections(API.museumCollections+mname+"?page="+pagenum_collection.toString());
+            getCollections(API.museumCollections+mname+"?page="+pagenum_collection.toString()+"?size=100");
         }
         if(bundle.getString(ARGUMENT_KEY).equals("教育活动"))
         {
             adapter3 = new EducationsAdapter(educationActivities);
             recyclerView.setAdapter(adapter3);
-            getEducation(API.museumEducations+mname+"?page="+pagenum_educaition.toString());
+            getEducation(API.museumEducations+mname+"?page="+pagenum_educaition.toString()+"?size=100");
         }
         if(bundle.getString(ARGUMENT_KEY).equals("新闻"))
         {
             adapter4 = new NewsAdapter(newsList);
             recyclerView.setAdapter(adapter4);
-            getNews(API.museumNews+mname+"?page="+pagenum_news.toString(),0);
+            getNews(API.museumNews+mname+"?page="+pagenum_news.toString()+"?size=100",0);
+        }
+        if(bundle.getString(ARGUMENT_KEY).equals("评论"))
+        {
+            adapter5 = new CommentAdapter(commentList);
+            recyclerView.setAdapter(adapter5);
+            // 选择1：设置drawable
+            SpacesItemDecoration itemDecoration = new SpacesItemDecoration(recyclerView.getContext(), SpacesItemDecoration.VERTICAL)
+                    .setNoShowDivider(0, 1)  // 第一个参数：头部不显示分割线的个数，第二个参数：尾部不显示分割线的个数，默认为1
+                    .setDrawable(R.drawable.divider);// 设置drawable文件
+//
+//// 选择2：设置颜色、高度、间距等
+//            SpacesItemDecoration itemDecoration = new SpacesItemDecoration(this, SpacesItemDecoration.VERTICAL)
+//                    .setNoShowDivider(1, 1)
+//                    // 颜色，分割线间距，左边距(单位dp)，右边距(单位dp)
+//                    .setParam(R.color.colorBlue, 10, 70, 70);
+
+            recyclerView.addItemDecoration(itemDecoration);
+            getComment(API.commentsInMuseum+mid.toString());
         }
         return view;
     }
@@ -211,12 +236,13 @@ public class CusFragment extends Fragment {
      * @param key
      * @return
      */
-    public static CusFragment newInStance(String key,String mname) {
+    public static CusFragment newInStance(String key,String mname,Integer mid) {
         CusFragment fragment = new CusFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ARGUMENT_KEY,key);
         //传递过来博物馆的参数
         bundle.putString(ARGUMENT_KEY2,mname);
+        bundle.putInt(ARGUMENT_KEY3,mid);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -224,38 +250,52 @@ public class CusFragment extends Fragment {
     //从服务器上获取展览数据
     private void getExhibitions(String url) {
         new Thread(()->{
+            Message message = new Message();
             try{
                 String jsonData = HttpRequest.Get(url);
-                JSONObject jsonObject=new JSONObject(jsonData);
-                JSONArray Jarray = jsonObject.getJSONArray("content");
-                for(int i=0;i<Jarray.length();i++) {
-                    JSONObject object = Jarray.getJSONObject(i);
-                    exhibitionsList.add(new Exhibition(object.getInt("eid"),object.getString("name"),object.getString("imgurl"),object.getString("mname")));
+                if(jsonData==null)
+                {
+                    message.what=0;
                 }
-                Message message = new Message();
-                message.what = 1;
+                else
+                {
+                    JSONObject jsonObject=new JSONObject(jsonData);
+                    JSONArray Jarray = jsonObject.getJSONArray("content");
+                    for(int i=0;i<Jarray.length();i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+                        exhibitionsList.add(new Exhibition(object.getInt("eid"),object.getString("name"),object.getString("imgurl"),object.getString("mname")));
+                    }
+                    message.what = 1;
+                }
                 handler.sendMessage(message); // 将Message对象发送出去
-
-
             }catch(JSONException e){
+                message.what=0;
                 e.printStackTrace();
             }}).start();
     }
     //从服务器上获取藏品数据
     private void getCollections(String url) {
         new Thread(()->{
+            Message message = new Message();
             try{
                 String jsonData = HttpRequest.Get(url);
-                JSONObject jsonObject=new JSONObject(jsonData);
-                JSONArray Jarray = jsonObject.getJSONArray("content");
-                for(int i=0;i<Jarray.length();i++) {
-                    JSONObject object = Jarray.getJSONObject(i);
-                    collectionsList.add(new Collection(object.getInt("cid"),object.getString("name"),object.getString("imgurl"),object.getString("mid")));
+                if(jsonData==null)
+                {
+                    message.what=0;
                 }
-                Message message = new Message();
-                message.what = 2;
+                else
+                {
+                    JSONObject jsonObject=new JSONObject(jsonData);
+                    JSONArray Jarray = jsonObject.getJSONArray("content");
+                    for(int i=0;i<Jarray.length();i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+                        collectionsList.add(new Collection(object.getInt("cid"),object.getString("name"),object.getString("imgurl"),object.getString("mid")));
+                    }
+                    message.what = 2;
+                }
                 handler.sendMessage(message); // 将Message对象发送出去
             }catch(JSONException e){
+                message.what=0;
                 e.printStackTrace();
             }}).start();
     }
@@ -264,19 +304,26 @@ public class CusFragment extends Fragment {
     {
 
         new Thread(()->{
+            Message message = new Message();
             try{
                 String jsonData = HttpRequest.Get(url);
-                JSONObject jsonObject=new JSONObject(jsonData);
-                JSONArray Jarray = jsonObject.getJSONArray("content");
-                for(int i=0;i<Jarray.length();i++) {
-                    JSONObject object = Jarray.getJSONObject(i);
-//                    newsList.add(new News(object.getString("title"), object.getString("imgurl"),object.getString("url"),object.getString("author"), object.getString("releasetime"),object.getInt("nature")));
-                    educationActivities.add(new EducationActivity(object.getInt("eid"),object.getString("imgurl"),object.getString("time"),object.getString("name")));
+                if(jsonData==null)
+                {
+                    message.what=0;
                 }
-                Message message = new Message();
-                message.what = 3;
+                else
+                {
+                    JSONObject jsonObject=new JSONObject(jsonData);
+                    JSONArray Jarray = jsonObject.getJSONArray("content");
+                    for(int i=0;i<Jarray.length();i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+                        educationActivities.add(new EducationActivity(object.getInt("eid"),object.getString("imgurl"),object.getString("time"),object.getString("name")));
+                    }
+                    message.what = 3;
+                }
                 handler.sendMessage(message); // 将Message对象发送出去
             }catch(JSONException e){
+                message.what=0;
                 e.printStackTrace();
             }}).start();
 
@@ -287,29 +334,64 @@ public class CusFragment extends Fragment {
 
         new Thread(()->{
             newsList.clear();
+            Message message = new Message();
             try{
                 String jsonData = HttpRequest.Get(url);
-                JSONObject jsonObject=new JSONObject(jsonData);
-                JSONArray Jarray = jsonObject.getJSONArray("content");
-                for(int i=0;i<Jarray.length();i++) {
-                    JSONObject object = Jarray.getJSONObject(i);
-                    int nature=object.getInt("nature");
-                    if(f==1)
-                    {
-                        if(nature==0)
-                            continue;
-                    }
-                    if(f==2)
-                    {
+                if(jsonData==null)
+                {
+                    message.what=0;
+                }
+                else
+                {
+                    JSONObject jsonObject=new JSONObject(jsonData);
+                    JSONArray Jarray = jsonObject.getJSONArray("content");
+                    for(int i=0;i<Jarray.length();i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+                        int nature=object.getInt("nature");
+                        if(f==1)
+                        {
+                            if(nature==0)
+                                continue;
+                        }
+                        if(f==2)
+                        {
                             if(nature!=0)
                                 continue;
+                        }
+                        newsList.add(new News(object.getString("title"), object.getString("imgurl"),object.getString("url"),object.getString("author"), object.getString("releasetime"),object.getInt("nature")));
                     }
-                    newsList.add(new News(object.getString("title"), object.getString("imgurl"),object.getString("url"),object.getString("author"), object.getString("releasetime"),object.getInt("nature")));
+                    message.what = 4;
                 }
-                Message message = new Message();
-                message.what = 4;
                 handler.sendMessage(message); // 将Message对象发送出去
             }catch(JSONException e){
+                message.what=0;
+                e.printStackTrace();
+            }}).start();
+    }
+    // 从服务器上获取评论数据
+    private void getComment(String url)
+    {
+
+        new Thread(()->{
+            Message message = new Message();
+            try{
+                String jsonData = HttpRequest.Get(url);
+                if(jsonData==null)
+                {
+                    message.what=0;
+                }
+                else
+                {
+                    JSONArray Jarray =new JSONArray(jsonData);
+                    for(int i=0;i<Jarray.length();i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+                        commentList.add(new Comment(object.getInt("uid"),object.getString("avatarurl"),object.getDouble("exhibitionstar"),object.getDouble("environmentstar"),object.getDouble("servicestar"),object.getString("content"),object.getString("time")));
+                    }
+                    message.what = 5;
+                }
+                handler.sendMessage(message); // 将Message对象发送出去
+            }catch(JSONException e){
+                message.what=0;
                 e.printStackTrace();
             }}).start();
 

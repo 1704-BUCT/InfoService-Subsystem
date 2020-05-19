@@ -55,10 +55,11 @@ public class MuseumActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             if(msg.what==1)
                 startActivity(intent2);
-            else
+            else if(msg.what==-1)
 //                Snackbar.make(materialRatingBar1, "评价成功", Snackbar.LENGTH_SHORT).show();
                 Toast.makeText(MuseumActivity.this, "您已经评论过，不可以再进行评论",Toast.LENGTH_SHORT).show();
-//                Snackbar.make(materialRatingBar2, "评价失败，请检查网络情况", Snackbar.LENGTH_SHORT).show();
+            else
+                Toast.makeText(MuseumActivity.this, "评价失败，请检查您的网络情况",Toast.LENGTH_SHORT).show();
         }
     };
     @Override
@@ -129,7 +130,7 @@ public class MuseumActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.viewpager);
 
         for (String s : mTitle) {
-            mFragments.add(CusFragment.newInStance(s,name.replaceAll("\\s*", "")));
+            mFragments.add(CusFragment.newInStance(s,name.replaceAll("\\s*", ""),mid));
         }
         mViewPager.setAdapter(new CusAdapter(getSupportFragmentManager()));
         mViewPager.setOffscreenPageLimit(5);     //好像是限制viewpager中fragment的个数
@@ -152,12 +153,27 @@ public class MuseumActivity extends AppCompatActivity {
                 else
                 {
                     new Thread(()->{
-                        String data=HttpRequest.Get(API.isAlreadyComment+"1"+"/"+mid.toString());
                         Message message = new Message();
-                        if(data.equals("0"))
-                            message.what =1;
+                        String data=HttpRequest.Get(API.isAlreadyComment+"1"+"/"+mid.toString());
+
+                        if(data==null)
+                        {
+                            message.what=0;
+                        }
                         else
-                            message.what= 0;
+                        {
+                            try {
+                                JSONObject json=new JSONObject(data);
+                                String status=json.getString("status");
+                                if(status.equals("0"))
+                                    message.what = 1;
+                                else
+                                    message.what= -1;
+                            } catch (JSONException e) {
+                                message.what=0;
+                                e.printStackTrace();
+                            }
+                        }
                         handler.sendMessage(message);    // 将Message对象发送出去
                     }).start();
 

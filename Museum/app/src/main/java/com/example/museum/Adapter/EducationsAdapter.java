@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.museum.Datas.EducationActivity;
 import com.example.museum.R;
 
@@ -53,14 +54,11 @@ public class EducationsAdapter  extends RecyclerView.Adapter<EducationsAdapter .
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 EducationActivity education = educationActivities.get(position);
-
                 //在非activity类中使用startActicity只需写成getContext().startActivity(intent)即可
                 Intent intent = new Intent(parent.getContext(), com.example.museum.EducationActivity.class);
                 intent.putExtra("id",education.getId());
-//                intent.putExtra("Url",mNewsList.get(position).getUrl());
                 parent.getContext().startActivity(intent);
             }
-
         });
         return holder;
     }
@@ -70,6 +68,7 @@ public class EducationsAdapter  extends RecyclerView.Adapter<EducationsAdapter .
         EducationActivity educations = educationActivities.get(position);
         Glide.with(holder.itemView)
                 .load(educations.getImgurl())
+                .transform(new RoundedCorners(40))
                 .error(R.drawable.pic_null)
                 .into(holder.educaitonImage);
         holder.educationName.setText(educations.getName());

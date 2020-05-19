@@ -6,15 +6,61 @@ package com.example.museum.Datas;
 * */
 public class Comment {
     Integer uid;
-    String content;
+    String avatarurl;
+    double exhibitionstar;
+    double environmentstar;
+    double servicestar;
     double avgstar;
+    String content;
     String time;
 
-    public Comment(Integer uid, String content, double avgstar, String time) {
+    public Comment(Integer uid, String avatarurl, double exhibitionstar, double environmentstar, double servicestar, String content, String time) {
         this.uid = uid;
+        this.avatarurl = avatarurl;
+        this.exhibitionstar = exhibitionstar;
+        this.environmentstar = environmentstar;
+        this.avgstar=(exhibitionstar+environmentstar+servicestar)/3;
+        this.servicestar = servicestar;
         this.content = content;
-        this.avgstar = avgstar;
         this.time = time;
+    }
+//    public Comment(Integer uid, String content, double avgstar, String time) {
+//        this.uid = uid;
+//        this.content = content;
+//        this.avgstar = avgstar;
+//        this.time = time;
+//    }
+
+    public String getAvatarurl() {
+        return avatarurl;
+    }
+
+    public void setAvatarurl(String avatarurl) {
+        this.avatarurl = avatarurl;
+    }
+
+    public double getExhibitionstar() {
+        return exhibitionstar;
+    }
+
+    public void setExhibitionstar(double exhibitionstar) {
+        this.exhibitionstar = exhibitionstar;
+    }
+
+    public double getEnvironmentstar() {
+        return environmentstar;
+    }
+
+    public void setEnvironmentstar(double environmentstar) {
+        this.environmentstar = environmentstar;
+    }
+
+    public double getServicestar() {
+        return servicestar;
+    }
+
+    public void setServicestar(double servicestar) {
+        this.servicestar = servicestar;
     }
 
     public Integer getUid() {

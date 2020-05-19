@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,6 +29,7 @@ import com.example.museum.Datas.Exhibition;
 import com.example.museum.Datas.Museum;
 import com.example.museum.ExhibitionsActivity;
 import com.example.museum.HttpRequest;
+import com.example.museum.MuseumActivity;
 import com.example.museum.MuseumsActivity;
 import com.example.museum.R;
 import com.example.museum.RankActivity;
@@ -38,6 +41,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.jingbin.library.ByRecyclerView;
+
 
 /*
 *    发现页面
@@ -47,21 +52,40 @@ public class FindingFragment extends Fragment implements View.OnClickListener {
     private ExhibitionAdapter_FindingPage adapter1;
     private CollectionAdapter_FindingPage adapter2;
     private MuseumsAdapter adapter3;
+    private View findingpart1;
+    private View findingpart2;
+    private View findingpart3;
     //防止在子线程中更新UI时程序会崩溃，添加了Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
+
             switch (msg.what)
             {
                 case 1:
+                    ProgressBar progressBar=getView().findViewById(R.id.finding_process);
+                    progressBar.setVisibility(View.GONE);
+                    findingpart1.setVisibility(View.VISIBLE);
                     adapter1.notifyDataSetChanged();
                     break;
                 case 2:
+                    progressBar=getView().findViewById(R.id.finding_process);
+                    progressBar.setVisibility(View.GONE);
+                    findingpart2.setVisibility(View.VISIBLE);
                     adapter2.notifyDataSetChanged();
                     break;
                 case 3:
+                    progressBar=getView().findViewById(R.id.finding_process);
+                    progressBar.setVisibility(View.GONE);
+                    findingpart3.setVisibility(View.VISIBLE);
                     adapter3.notifyDataSetChanged();
+                    break;
+                case 0:
+                    progressBar=getView().findViewById(R.id.finding_process);
+                    progressBar.setVisibility(View.GONE);
+                    TextView error=getView().findViewById(R.id.finding_error);
+                    error.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -70,6 +94,9 @@ public class FindingFragment extends Fragment implements View.OnClickListener {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_findingpage, container, false);
+        findingpart1=(View)root.findViewById(R.id.findingpart1);
+        findingpart2=(View)root.findViewById(R.id.findingpart2);
+        findingpart3=(View)root.findViewById(R.id.findingpart3);
         //跳转到搜索博物馆页面
         LinearLayout linearLayout1 = root.findViewById(R.id.findingsearch1);
         linearLayout1.setOnClickListener(this);
@@ -106,47 +133,80 @@ public class FindingFragment extends Fragment implements View.OnClickListener {
         linearLayout6.setOnClickListener(this);
 
         //卡片式布局显示博物馆列表
-        RecyclerView recyclerView3 = (RecyclerView) root.findViewById(R.id.recycler_findingpart3);
+        ByRecyclerView recyclerView3 = (ByRecyclerView) root.findViewById(R.id.recycler_findingpart3);
         LinearLayoutManager layoutManager3 = new LinearLayoutManager(root.getContext());
         layoutManager3.setOrientation(RecyclerView.HORIZONTAL);
         recyclerView3.setLayoutManager(layoutManager3);
         List<Museum> museumsList = new ArrayList<>();
         adapter3= new MuseumsAdapter(museumsList);
         recyclerView3.setAdapter(adapter3);
+        //设置列表项的点击事件
+        recyclerView3.setOnItemClickListener(new ByRecyclerView.OnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Museum museum = adapter3.getItemData(position);     // 通过adapter获取对应position的数据
+                Intent intent = new Intent(getContext(), MuseumActivity.class);
+                intent.putExtra("mid",museum.getMid());
+                intent.putExtra("name",museum.getName());
+                intent.putExtra("introduction",museum.getIntroduction());
+                intent.putExtra("avgstar",museum.getAvgstar());
+                intent.putExtra("opentime",museum.getOpentime());
+                intent.putExtra("address",museum.getAddress());
+                intent.putExtra("imgurl",museum.getImgurl());
+                intent.putExtra("mobile",museum.getMobile());
+                startActivity(intent);
+            }
+        });
         //获取展览数据
         new Thread(()->{
+            Message message=new Message();
             try {
                 String jsonData = HttpRequest.Get(API.showAllExhibitions+"?page=0");
-                JSONObject jsonObject=new JSONObject(jsonData);
-                JSONArray Jarray = jsonObject.getJSONArray("content");
-                for (int i = 0; i < 4; i++) {
-                    JSONObject item = Jarray.getJSONObject(i);
-//                    museumsList.add(new Museum(object.getInt("mid"),object.getString("imrurl"),object.getString("name"),object.getDouble("avgstar")));
-                    exhibitsList.add(new Exhibition(item.getInt("eid"),item.getString("name"),item.getString("imgurl"),item.getString("mname")));
+                if(jsonData==null)
+                {
+                    message.what=0;
                 }
-                Message message=new Message();
-                message.what = 1;
+                else
+                {
+                    JSONObject jsonObject=new JSONObject(jsonData);
+                    JSONArray Jarray = jsonObject.getJSONArray("content");
+                    for (int i = 0; i < 4; i++) {
+                        JSONObject item = Jarray.getJSONObject(i);
+                        exhibitsList.add(new Exhibition(item.getInt("eid"),item.getString("name"),item.getString("imgurl"),item.getString("mname")));
+                    }
+                    message.what = 1;
+                }
                 handler.sendMessage(message);    // 将Message对象发送出去
             } catch (JSONException e) {
+                message.what=0;
+                handler.sendMessage(message);    // 将Message对象发送出去
                 e.printStackTrace();
             }
 
         }).start();
         //获取藏品数据
         new Thread(()->{
+            Message message=new Message();
             try {
                 String jsonData = HttpRequest.Get(API.showAllColllections+"?page=0");
-                JSONObject jsonObject=new JSONObject(jsonData);
-                JSONArray Jarray = jsonObject.getJSONArray("content");
-                for (int i = 0; i < 4; i++) {
-                    JSONObject object = Jarray.getJSONObject(i);
-//                    museumsList.add(new Museum(object.getInt("mid"),object.getString("imrurl"),object.getString("name"),object.getDouble("avgstar")));
-                    collectionsList.add(new Collection(object.getInt("cid"),object.getString("name"),object.getString("imgurl"),object.getString("mid")));
+                if(jsonData==null)
+                {
+                    message.what=0;
                 }
-                Message message=new Message();
-                message.what = 2;
+                else
+                {
+                    JSONObject jsonObject=new JSONObject(jsonData);
+                    JSONArray Jarray = jsonObject.getJSONArray("content");
+                    for (int i = 0; i < 4; i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+                        collectionsList.add(new Collection(object.getInt("cid"),object.getString("name"),object.getString("imgurl"),object.getString("mid")));
+                    }
+                    message.what = 2;
+                }
                 handler.sendMessage(message);    // 将Message对象发送出去
             } catch (JSONException e) {
+                message.what=0;
+                handler.sendMessage(message);    // 将Message对象发送出去
                 e.printStackTrace();
             }
 
@@ -154,22 +214,30 @@ public class FindingFragment extends Fragment implements View.OnClickListener {
 
         //获取博物馆数据
         new Thread(()->{
+            Message message=new Message();
             try {
                 String jsonData = HttpRequest.Get(API.showAllMuseums+"?page=0");
-                JSONObject jsonObject=new JSONObject(jsonData);
-                JSONArray Jarray = jsonObject.getJSONArray("content");
-                for (int i = 0; i < 7; i++) {
-                    JSONObject object = Jarray.getJSONObject(i);
-//                    museumsList.add(new Museum(object.getInt("mid"),object.getString("imrurl"),object.getString("name"),object.getDouble("avgstar")));
-                    museumsList.add(new Museum(object.getInt("mid"),object.getString("imgurl"),object.getString("name"),
-                            object.getDouble("avgenvironmentstar"),object.getDouble("avgexhibitionstar"),object.getDouble("avgservicestar"),
-                            object.getString("address"),object.getDouble("avgstar"),
-                            object.getString("introduction"),object.getString("opentime"),object.getString("mobile")));
+                if(jsonData==null)
+                {
+                    message.what=0;
                 }
-                Message message=new Message();
-                message.what = 3;
+                else
+                {
+                    JSONObject jsonObject=new JSONObject(jsonData);
+                    JSONArray Jarray = jsonObject.getJSONArray("content");
+                    for (int i = 0; i < 7; i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+                        museumsList.add(new Museum(object.getInt("mid"),object.getString("imgurl"),object.getString("name"),
+                                object.getDouble("avgenvironmentstar"),object.getDouble("avgexhibitionstar"),object.getDouble("avgservicestar"),
+                                object.getString("address"),object.getDouble("avgstar"),
+                                object.getString("introduction"),object.getString("opentime"),object.getString("mobile")));
+                    }
+                    message.what = 3;
+                }
                 handler.sendMessage(message);    // 将Message对象发送出去
             } catch (JSONException e) {
+                message.what = 0;
+                handler.sendMessage(message);    // 将Message对象发送出去
                 e.printStackTrace();
             }
 

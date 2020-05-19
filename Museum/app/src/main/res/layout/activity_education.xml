@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:id="@+id/collapsing_bar_education"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:contentScrim="#697DC9"
+            app:contentScrim="#75878a"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true"
             app:expandedTitleTextAppearance="@style/Expanded_Title"

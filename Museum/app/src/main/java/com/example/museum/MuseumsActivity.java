@@ -22,6 +22,7 @@ import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.museum.API.API;
@@ -45,27 +46,49 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jingbin.library.ByRecyclerView;
+
 /*
 * 博物馆搜索页页面
 * */
 public class MuseumsActivity extends AppCompatActivity {
 
-    private  MuseumsAdapter adapter;
+
     private RecordsDao mRecordsDao;
     //默然展示词条个数
-    private final int DEFAULT_RECORD_NUMBER = 10;
+    private final int DEFAULT_RECORD_NUMBER = 8;
     private List<String> recordList = new ArrayList<>();
     private TagAdapter mRecordsAdapter;
     private LinearLayout mHistoryContent;
-    private  RecyclerView recyclerView;
+    private ByRecyclerView recyclerView;
     private List<Museum> museumList;
+    private  MuseumsAdapter adapter=new MuseumsAdapter(museumList);
+    private Integer page=0;
     //防止在子线程中更新UI时程序会崩溃，添加了Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
+
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
-              adapter.notifyDataSetChanged();//UI更改操作
+                ProgressBar progressBar=findViewById(R.id.museums_process);
+                progressBar.setVisibility(View.GONE);
+                if(page==1)
+                    recyclerView.setRefreshing(false);
+                else
+                    recyclerView.loadMoreComplete();       // 加载更多完成
+                adapter.setNewData(museumList);            // 设置及刷新数据
+            }
+            else if(msg.what==0)
+            {
+                ProgressBar progressBar=findViewById(R.id.museums_process);
+                progressBar.setVisibility(View.INVISIBLE);
+                TextView error=findViewById(R.id.museums_error);
+                error.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                recyclerView.loadMoreEnd();            // 没有更多内容了
             }
         }
     };
@@ -108,13 +131,17 @@ public class MuseumsActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String record = editText.getText().toString();
                 if (!TextUtils.isEmpty(record)) {
-                    getMuseums(API.getPartMuseumByName+record);
+                    page=0;
+                    museumList.clear();
+                    getMuseums(API.getPartMuseumByName+record+"?size=50");
                     //添加数据
                     mRecordsDao.addRecords(record);
                 }
                 else
                 {
-                    getMuseums(API.showAllMuseums);
+                    page=0;
+                    museumList.clear();
+                    getMuseums(API.showAllMuseums+"?page="+page.toString());
                 }
                 return event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER);
             }
@@ -205,9 +232,18 @@ public class MuseumsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String record = editText.getText().toString();
                 if (!TextUtils.isEmpty(record)) {
-                    getMuseums(API.getPartMuseumByName+record);
+                    page=0;
+                    museumList.clear();
+                    System.out.println(API.getPartMuseumByName+record+"?size=50");
+                    getMuseums(API.getPartMuseumByName+record+"?size=50");
                     //添加数据
                     mRecordsDao.addRecords(record);
+                }
+                else
+                {
+                    page=0;
+                    museumList.clear();
+                    getMuseums(API.showAllMuseums+"?page="+page.toString());
                 }
             }
         });
@@ -226,30 +262,67 @@ public class MuseumsActivity extends AppCompatActivity {
         });
 
         //卡片式布局显示博物馆列表
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_museumsviews);
+        recyclerView = (ByRecyclerView) findViewById(R.id.recycler_museumsviews);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MuseumsAdapter(museumList);
-        recyclerView.setAdapter(adapter);
         getMuseums(API.showAllMuseums+"?page=0");
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLoadMoreEnabled(true);
+        recyclerView.setOnLoadMoreListener(new ByRecyclerView.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                getMuseums(API.showAllMuseums+"?page="+page.toString());
+            }
+        }, 10);// delayMillis: 延迟多少毫秒调用接口
+        //设置列表项的点击事件
+        recyclerView.setOnItemClickListener(new ByRecyclerView.OnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Museum museum = adapter.getItemData(position);     // 通过adapter获取对应position的数据
+                Intent intent = new Intent(MuseumsActivity.this, MuseumActivity.class);
+                intent.putExtra("mid",museum.getMid());
+                intent.putExtra("name",museum.getName());
+                intent.putExtra("introduction",museum.getIntroduction());
+                intent.putExtra("avgstar",museum.getAvgstar());
+                intent.putExtra("opentime",museum.getOpentime());
+                intent.putExtra("address",museum.getAddress());
+                intent.putExtra("imgurl",museum.getImgurl());
+                intent.putExtra("mobile",museum.getMobile());
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void getMuseums(String url) {
         new Thread(()->{
+            if(page==0)
             museumList.clear();
+            Message message = new Message();
             try {
                 String jsonData = HttpRequest.Get(url);
-                JSONObject jsonObject=new JSONObject(jsonData);
-                JSONArray Jarray = jsonObject.getJSONArray("content");
-                for (int i = 0; i < Jarray.length(); i++) {
-                    JSONObject object = Jarray.getJSONObject(i);
-                    museumList.add(new Museum(object.getInt("mid"),object.getString("imgurl"),object.getString("name"),
-                            object.getDouble("avgenvironmentstar"),object.getDouble("avgexhibitionstar"),object.getDouble("avgservicestar"),
-                            object.getString("address"),object.getDouble("avgstar"),
-                            object.getString("introduction"),object.getString("opentime"),object.getString("mobile")));
+                //考虑网络请求出错的情况
+                if(jsonData==null)
+                    message.what = 0;
+                else {
+                    JSONObject jsonObject = new JSONObject(jsonData);
+                    int pagenum = jsonObject.getInt("totalPages");
+                    JSONArray Jarray = jsonObject.getJSONArray("content");
+                    for (int i = 0; i < Jarray.length(); i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+                        museumList.add(new Museum(object.getInt("mid"), object.getString("imgurl"), object.getString("name"),
+                                object.getDouble("avgenvironmentstar"), object.getDouble("avgexhibitionstar"), object.getDouble("avgservicestar"),
+                                object.getString("address"), object.getDouble("avgstar"),
+                                object.getString("introduction"), object.getString("opentime"), object.getString("mobile")));
+                    }
+                    if(page>=pagenum)
+                        message.what=-1;
+                    else
+                    {
+                        page++;
+                        message.what = 1;
+                    }
                 }
-                Message message=new Message();
-                message.what = 1;
                 handler.sendMessage(message);    // 将Message对象发送出去
             } catch (JSONException e) {
                 e.printStackTrace();

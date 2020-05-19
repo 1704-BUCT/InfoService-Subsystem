@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
-            app:tab_visual_count="4"
+            app:tab_visual_count="3"
             app:tab_type="rect"
             app:tab_color="@color/select"
             app:tab_height="2dp"
