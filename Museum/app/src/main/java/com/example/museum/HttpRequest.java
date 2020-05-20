@@ -1,6 +1,14 @@
 package com.example.museum;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -13,11 +21,13 @@ import okhttp3.Response;
 * 网络请求的一些函数
 * */
 public class HttpRequest {
+
+
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static OkHttpClient client = new OkHttpClient();
-    public static String Get(String url)
-    {
+    public static String Get(String url)  {
         Request request = new Request.Builder()
+                .addHeader("Connection", "close")
                 .url(url)
                 .build();
         Call call = client.newCall(request);
@@ -25,7 +35,10 @@ public class HttpRequest {
         try{
             Response response = null;
             response = call.execute();
-            str = response.body().string();
+            int code=response.code();
+            if(code == 200){
+                str = response.body().string();
+            }
         }catch(IOException e){
             e.printStackTrace();
         }

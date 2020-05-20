@@ -1,37 +1,51 @@
 <!--发现页面内展览列表每一项的布局文件-->
-<androidx.cardview.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="160dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:weightSum="100">
+<androidx.cardview.widget.CardView
+    android:layout_weight="95"
+    android:layout_width="0dp"
     android:layout_height="130dp"
-    android:layout_gravity="center_horizontal"
     android:layout_marginTop="20dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginRight="10dp"
+    android:layout_gravity="center_horizontal"
     app:cardCornerRadius="4dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_gravity="center_horizontal">
+        android:weightSum="100">
         <ImageView
             android:id="@+id/exhibition_image"
             android:layout_width="match_parent"
-            android:layout_height="99dp"
+            android:layout_height="0dp"
+            android:layout_weight="80"
             android:layout_gravity="center_horizontal"
             android:scaleType="centerCrop" />
+        <LinearLayout
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:layout_width="match_parent"
+            android:weightSum="100"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
             <TextView
                 android:id="@+id/exhibition_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="90"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
                 android:gravity="center"
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:text="展览名"
                 android:textSize="16sp"
                 android:textAlignment="center" />
-    </LinearLayout>
-
+        </LinearLayout>
+</LinearLayout>
 </androidx.cardview.widget.CardView>
+</LinearLayout>

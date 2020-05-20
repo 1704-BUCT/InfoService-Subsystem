@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.jingbin.library.ByRecyclerView;
 import me.jingbin.library.decoration.SpacesItemDecoration;
 
 
@@ -120,6 +121,7 @@ public class CusFragment extends Fragment {
                         textView.setText("已到达底部~");
                     break;
                 case 0:
+                    progressBar.setVisibility(View.GONE);
                     textView.setText("数据加载失败，请检查网络");
                     break;
             }
@@ -218,14 +220,8 @@ public class CusFragment extends Fragment {
             SpacesItemDecoration itemDecoration = new SpacesItemDecoration(recyclerView.getContext(), SpacesItemDecoration.VERTICAL)
                     .setNoShowDivider(0, 1)  // 第一个参数：头部不显示分割线的个数，第二个参数：尾部不显示分割线的个数，默认为1
                     .setDrawable(R.drawable.divider);// 设置drawable文件
-//
-//// 选择2：设置颜色、高度、间距等
-//            SpacesItemDecoration itemDecoration = new SpacesItemDecoration(this, SpacesItemDecoration.VERTICAL)
-//                    .setNoShowDivider(1, 1)
-//                    // 颜色，分割线间距，左边距(单位dp)，右边距(单位dp)
-//                    .setParam(R.color.colorBlue, 10, 70, 70);
-
             recyclerView.addItemDecoration(itemDecoration);
+
             getComment(API.commentsInMuseum+mid.toString());
         }
         return view;
@@ -385,7 +381,7 @@ public class CusFragment extends Fragment {
                     JSONArray Jarray =new JSONArray(jsonData);
                     for(int i=0;i<Jarray.length();i++) {
                         JSONObject object = Jarray.getJSONObject(i);
-                        commentList.add(new Comment(object.getInt("uid"),object.getString("avatarurl"),object.getDouble("exhibitionstar"),object.getDouble("environmentstar"),object.getDouble("servicestar"),object.getString("content"),object.getString("time")));
+                        commentList.add(new Comment(object.getInt("uid"),object.getString("name"),object.getString("avatarurl"),object.getDouble("exhibitionstar"),object.getDouble("environmentstar"),object.getDouble("servicestar"),object.getString("content"),object.getString("time")));
                     }
                     message.what = 5;
                 }

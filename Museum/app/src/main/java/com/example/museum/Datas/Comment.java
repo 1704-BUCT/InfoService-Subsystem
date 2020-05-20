@@ -6,6 +6,16 @@ package com.example.museum.Datas;
 * */
 public class Comment {
     Integer uid;
+    String uname;
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
     String avatarurl;
     double exhibitionstar;
     double environmentstar;
@@ -14,8 +24,9 @@ public class Comment {
     String content;
     String time;
 
-    public Comment(Integer uid, String avatarurl, double exhibitionstar, double environmentstar, double servicestar, String content, String time) {
+    public Comment(Integer uid, String uname, String avatarurl, double exhibitionstar, double environmentstar, double servicestar, String content, String time) {
         this.uid = uid;
+        this.uname = uname;
         this.avatarurl = avatarurl;
         this.exhibitionstar = exhibitionstar;
         this.environmentstar = environmentstar;
@@ -24,6 +35,9 @@ public class Comment {
         this.content = content;
         this.time = time;
     }
+
+
+
 //    public Comment(Integer uid, String content, double avgstar, String time) {
 //        this.uid = uid;
 //        this.content = content;

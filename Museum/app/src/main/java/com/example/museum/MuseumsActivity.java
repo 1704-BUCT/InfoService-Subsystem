@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -118,34 +119,47 @@ public class MuseumsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        //监听回车键按下事件
+
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            /**
-             *
-             * @param v 被监听的对象
-             * @param actionId  动作标识符,如果值等于EditorInfo.IME_NULL，则回车键被按下。
-             * @param event    如果由输入键触发，这是事件；否则，这是空的(比如非输入键触发是空的)。
-             * @return 返回你的动作
-             */
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String record = editText.getText().toString();
-                if (!TextUtils.isEmpty(record)) {
-                    page=0;
-                    museumList.clear();
-                    getMuseums(API.getPartMuseumByName+record+"?size=50");
-                    //添加数据
-                    mRecordsDao.addRecords(record);
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {//EditorInfo.IME_ACTION_SEARCH、EditorInfo.IME_ACTION_SEND等分别对应EditText的imeOptions属性
+                    //TODO回车键按下时要执行的操作
+                    String record = editText.getText().toString();
+                    if (!TextUtils.isEmpty(record)) {
+                        page=0;
+                        museumList.clear();
+                        recyclerView.setLoadMoreEnabled(false);
+                        getMuseums(API.getPartMuseumByName+record+"?size=50");
+                        //添加数据
+                        mRecordsDao.addRecords(record);
+                    }
+                    else
+                    {
+                        page=0;
+                        museumList.clear();
+                        getMuseums(API.showAllMuseums+"?page="+page.toString());
+                    }
                 }
-                else
-                {
-                    page=0;
-                    museumList.clear();
-                    getMuseums(API.showAllMuseums+"?page="+page.toString());
-                }
-                return event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER);
+                return false;
             }
         });
+
+//        //监听回车键按下事件
+//        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            /**
+//             *
+//             * @param v 被监听的对象
+//             * @param actionId  动作标识符,如果值等于EditorInfo.IME_NULL，则回车键被按下。
+//             * @param event    如果由输入键触发，这是事件；否则，这是空的(比如非输入键触发是空的)。
+//             * @return 返回你的动作
+//             */
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//
+//                return event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER);
+//            }
+//        });
         //创建历史标签适配器
         //为标签设置对应的内容
         mRecordsAdapter = new TagAdapter<String>(recordList) {
@@ -234,6 +248,7 @@ public class MuseumsActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(record)) {
                     page=0;
                     museumList.clear();
+                    recyclerView.setLoadMoreEnabled(false);
                     System.out.println(API.getPartMuseumByName+record+"?size=50");
                     getMuseums(API.getPartMuseumByName+record+"?size=50");
                     //添加数据
@@ -301,6 +316,8 @@ public class MuseumsActivity extends AppCompatActivity {
             Message message = new Message();
             try {
                 String jsonData = HttpRequest.Get(url);
+//                System.out.println(url);
+//                System.out.println(jsonData);
                 //考虑网络请求出错的情况
                 if(jsonData==null)
                     message.what = 0;
@@ -325,6 +342,8 @@ public class MuseumsActivity extends AppCompatActivity {
                 }
                 handler.sendMessage(message);    // 将Message对象发送出去
             } catch (JSONException e) {
+                message.what=-1;
+                handler.sendMessage(message);
                 e.printStackTrace();
             }
 

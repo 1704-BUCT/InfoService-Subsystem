@@ -12,35 +12,36 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#ffffff"
+        android:weightSum="100"
         android:orientation="horizontal">
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="50dp"
-            android:layout_height="43dp"
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="match_parent"
             android:paddingLeft="@dimen/space_large"
             android:layout_gravity="center_vertical"
-            android:paddingRight="@dimen/space_large"
             android:src="@drawable/ic_back" />
-
+        <androidx.legacy.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"/>
         <LinearLayout
-            android:layout_width="270dp"
+            android:layout_width="0dp"
+            android:layout_weight="70"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginRight="20dp"
             android:background="@drawable/search_item_background"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
-
+            android:orientation="horizontal">
             <EditText
                 android:id="@+id/edit_query"
-                android:layout_width="180dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="11"
                 android:background="@null"
                 android:hint="请输入搜索的博物馆名字"
                 android:imeOptions="actionSearch"
@@ -48,24 +49,19 @@
                 android:textSize="14sp" />
             <ImageView
                 android:id="@+id/iv_clear_search"
-                android:layout_width="20dp"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginTop="@dimen/space_normal"
-                android:layout_marginRight="2dp"
                 android:layout_marginBottom="@dimen/space_normal"
                 android:src="@drawable/ic_delete" />
         </LinearLayout>
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--          />-->
         <TextView
             android:id="@+id/iv_search"
-            android:layout_width="wrap_content"
+            android:layout_weight="17"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginRight="20dp"
             android:gravity="center"
             android:text="搜索" />
     </LinearLayout>
@@ -81,27 +77,30 @@
         android:paddingTop="@dimen/space_normal">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="fill_horizontal"
+            android:weightSum="100">
             <TextView
                 android:id="@+id/tv_history_hint"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="50"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical|start"
                 android:text="搜索历史"
                 android:textColor="#383838"
                 android:textSize="14sp"/>
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="41"
                 />
+
             <ImageView
                 android:id="@+id/clear_all_records"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_delete_history"
-                android:layout_marginRight="13dp"/>
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:src="@drawable/ic_delete_history" />
         </LinearLayout>
         <com.zhy.view.flowlayout.TagFlowLayout
             android:id="@+id/fl_search_records"
@@ -128,7 +127,7 @@
             android:visibility="gone" />
     </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical">
@@ -146,12 +145,21 @@
             android:gravity="center"
             android:text="网络似乎出了点状况~"
             android:visibility="gone"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="20">
         <me.jingbin.library.ByRecyclerView
             android:id="@+id/recycler_museumsviews"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="18"
+            android:layout_gravity="center"
             android:layout_height="match_parent"
             tools:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/recycleritem_museumsview" />
+        </LinearLayout>
 <!--        <androidx.recyclerview.widget.RecyclerView-->
 <!--            android:id="@+id/recycler_museumsviews"-->
 <!--            android:layout_width="match_parent"-->

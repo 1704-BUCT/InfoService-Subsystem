@@ -11,11 +11,11 @@ public class API {
 //    private final static String BASE_URL = "http://192.168.56.1:8080/";
 
     public final static  String showAllMuseums=BASE_URL+"museum/findAll";
-    public final static String showMuseumSortByAvgstar=BASE_URL+"/museum/findAll/sortByAvgstar";
-    public final static String showMuseumSortByAvgenvironstar=BASE_URL+"/museum/findAll/sortByAvgenvironmentstar";
-    public final static String showMuseumSortByAvgexhibitstar=BASE_URL+"/museum/findAll/sortByAvgexhibitionstar";
-    public final static String showMuseumSortByAvgservicestar=BASE_URL+"/museum/findAll/sortByAvgservicestar";
-    public final static String showMuseumSortByNum= BASE_URL+"/museum/findAll/sortByExhibitionNums";
+    public final static String showMuseumSortByAvgstar=BASE_URL+"museum/findAll/sortByAvgstar";
+    public final static String showMuseumSortByAvgenvironstar=BASE_URL+"museum/findAll/sortByAvgenvironmentstar";
+    public final static String showMuseumSortByAvgexhibitstar=BASE_URL+"museum/findAll/sortByAvgexhibitionstar";
+    public final static String showMuseumSortByAvgservicestar=BASE_URL+"museum/findAll/sortByAvgservicestar";
+    public final static String showMuseumSortByNum= BASE_URL+"museum/findAll/sortByExhibitionNums";
     public final static String getPartMuseumByName=BASE_URL+"museum/searchByName/";
 
     public final static  String showAllEducations=BASE_URL+"education/findAll";
@@ -27,9 +27,11 @@ public class API {
 
     public final static String showAllExhibitions=BASE_URL+"exhibition/findAll";
     public final static String museumExhibitions=BASE_URL+"exhibition/findByMname/";
+    public final static String findExhibitions=BASE_URL+"exhibition/findByName/";
 
     public final static String showAllColllections=BASE_URL+"collection/findAll";
     public final static String museumCollections=BASE_URL+"collection/findByMname/";
+    public final static String findCollections=BASE_URL+"collection/findByName/";
 
     public final static String signin=BASE_URL+"user/signin";
     public final static String signup=BASE_URL+"user/signup";

@@ -45,15 +45,13 @@ public class CommentAdapter extends BaseRecyclerAdapter<Comment> {
                     .error(pics.get(index))
                     .into((CircleImageView) holder.getView(R.id.avatar_comment));
         }
-        holder.setText(R.id.user_name_comment,"用户"+comment.getUid().toString());
+        holder.setText(R.id.user_name_comment,comment.getUname());
         if(comment.getContent()==null||comment.getContent().equals(""))
             holder.setText(R.id.comment_content,"无评价内容");
         else
             holder.setText(R.id.comment_content,comment.getContent());
         holder.setText(R.id.comment_time,comment.getTime());
-//        holder.setText(R.id.news_title,news.getName());
-//        holder.setText(R.id.news_author,news.getAuthor());
-//        holder.setText(R.id.news_releasetime,news.getReleasetime().toString());
+
 
     }
 }

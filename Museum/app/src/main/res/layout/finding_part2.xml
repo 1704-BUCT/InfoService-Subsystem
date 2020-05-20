@@ -5,52 +5,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:contentPaddingRight="10dp"
-    app:contentPaddingLeft="25dp"
     app:contentPaddingTop="15dp"
     app:contentPaddingBottom="25dp">
-
     <LinearLayout
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="100"
+        android:gravity="center_horizontal"
+        >
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_weight="90"
+        android:layout_width="0dp"
         android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="12dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
                 android:layout_height="35dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/shape_rect"
+                android:src="@drawable/rectangle"
                 android:layout_gravity="center_vertical"/>
-
-            <Space
-                android:layout_width="11dp"
-                android:layout_height="match_parent" />
-
+            <androidx.legacy.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_weight="5"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="藏品"
                 android:textSize="20sp"/>
 
-<!--            <Space-->
-<!--                android:layout_width="228dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                />-->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_weight="10"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="25dp"
                 android:orientation="horizontal"
+                android:gravity="center_vertical|right"
                 android:id="@+id/part_more2">
                 <TextView
                     android:layout_width="wrap_content"
@@ -65,10 +62,18 @@
                     android:layout_gravity="center_vertical"/>
             </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:weightSum="100">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_findingpart2"
-            android:layout_width="match_parent"
+            android:layout_weight="102"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             />
+        </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

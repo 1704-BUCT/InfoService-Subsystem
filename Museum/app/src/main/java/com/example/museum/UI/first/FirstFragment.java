@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.*;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.youth.banner.*;
+import com.youth.banner.adapter.BannerAdapter;
 import com.youth.banner.indicator.CircleIndicator;
 import com.youth.banner.listener.OnPageChangeListener;
 import com.youth.banner.util.BannerUtils;
@@ -41,7 +42,6 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
     private ProgressBar progressBar;
     private TextView textView;
     private List<News> bannarDatas;
-    private List<News> bannarDatas1;
     private List<News> newsList=new ArrayList<>();
     private List<News> newsList1=new ArrayList<>();
     private NewsAdapter adapter=new NewsAdapter(newsList);
@@ -59,10 +59,8 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
                 else
                     recyclerView.loadMoreComplete();      // 加载更多完成
                 progressBar.setVisibility(View.GONE);
-                //此处用了两个List的副本，来防止在网络数据时用户点击列表项闪退的问题
-                bannarDatas1=new ArrayList<>(bannarDatas);
-//                adapterBanner.notifyDataSetChanged();
-                adapterBanner.setDatas(bannarDatas1);
+                //此处用了List的副本，来防止在网络数据时用户点击列表项闪退的问题
+                adapterBanner.notifyDataSetChanged();
                 newsList1=new ArrayList<>(newsList);
                 adapter.setNewData(newsList1);            // 设置及刷新数据
             }
@@ -70,7 +68,8 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
             {
                 //网络异常时
                 progressBar.setVisibility(View.GONE);
-                textView.setVisibility(View.VISIBLE);
+//                textView.setVisibility(View.VISIBLE);
+                recyclerView.loadMoreFail();
             }
             else
                 recyclerView.loadMoreEnd();            // 没有更多内容了
@@ -111,16 +110,16 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
         recyclerView.setAdapter(adapter);
         textView=root.findViewById(R.id.news_error);
 
-        //设置列表项的点击事件
-        recyclerView.setOnItemClickListener(new ByRecyclerView.OnItemClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-                News news = adapter.getItemData(position);     // 通过adapter获取对应position的数据
-                Intent intent = new Intent(getContext(), NewsActivity.class);
-                intent.putExtra("Url",news.getUrl());
-                startActivity(intent);
-            }
-        });
+//        //设置列表项的点击事件
+//        recyclerView.setOnItemClickListener(new ByRecyclerView.OnItemClickListener() {
+//            @Override
+//            public void onClick(View v, int position) {
+//                News news = adapter.getItemData(position);     // 通过adapter获取对应position的数据
+//                Intent intent = new Intent(getContext(), NewsActivity.class);
+//                intent.putExtra("Url",news.getUrl());
+//                startActivity(intent);
+//            }
+//        });
         //设置下拉刷新
         recyclerView.setOnRefreshListener(new ByRecyclerView.OnRefreshListener() {
             @Override
@@ -166,7 +165,6 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
         new Thread(()->{
             if(page==0)
             {
-                bannarDatas.clear();
                 newsList.clear();
             }
             Message message = new Message();
@@ -182,11 +180,16 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
                     JSONArray Jarray = jsonObject.getJSONArray("content");
                     for (int i = 0; i < Jarray.length(); i++) {
                         JSONObject object = Jarray.getJSONObject(i);
-                        if (i < 3 && page==0)
-                            bannarDatas.add(new News(object.getString("title"), object.getString("imgurl"), object.getString("url")));
+                        if (i < 3 && page==0) {
+                            if(bannarDatas.size()<3)
+                                bannarDatas.add(new News(object.getString("title"), object.getString("imgurl"), object.getString("url")));
+                            else
+                                bannarDatas.set(i,new News(object.getString("title"), object.getString("imgurl"), object.getString("url")));
+                        }
                         else
                             newsList.add(new News(object.getString("title"), object.getString("imgurl"), object.getString("url"), object.getString("author"), object.getString("releasetime"), object.getInt("nature")));
                     }
+
                     if(page>=pagenum)
                         message.what=-1;
                     else
@@ -197,7 +200,7 @@ public class FirstFragment extends Fragment implements OnPageChangeListener {
                 }
                 handler.sendMessage(message);    // 将Message对象发送出去
             }catch(JSONException e){
-                message.what = 0;
+                message.what = -1;
                 handler.sendMessage(message);    // 将Message对象发送出去
                 e.printStackTrace();
             }}).start();

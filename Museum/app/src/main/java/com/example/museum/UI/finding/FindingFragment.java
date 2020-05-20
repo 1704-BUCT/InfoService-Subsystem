@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.jingbin.library.ByRecyclerView;
+import me.jingbin.library.decoration.SpacesItemDecoration;
 
 
 /*
@@ -136,7 +137,15 @@ public class FindingFragment extends Fragment implements View.OnClickListener {
         ByRecyclerView recyclerView3 = (ByRecyclerView) root.findViewById(R.id.recycler_findingpart3);
         LinearLayoutManager layoutManager3 = new LinearLayoutManager(root.getContext());
         layoutManager3.setOrientation(RecyclerView.HORIZONTAL);
+        // 选择2：设置颜色、高度、间距等
+        SpacesItemDecoration itemDecoration = new SpacesItemDecoration(recyclerView3.getContext(), SpacesItemDecoration.HORIZONTAL)
+                .setNoShowDivider(0, 1)
+                // 颜色，分割线间距，左边距(单位dp)，右边距(单位dp)
+                .setParam(R.color.white, 20);
+
+        recyclerView3.addItemDecoration(itemDecoration);
         recyclerView3.setLayoutManager(layoutManager3);
+
         List<Museum> museumsList = new ArrayList<>();
         adapter3= new MuseumsAdapter(museumsList);
         recyclerView3.setAdapter(adapter3);
@@ -161,7 +170,7 @@ public class FindingFragment extends Fragment implements View.OnClickListener {
         new Thread(()->{
             Message message=new Message();
             try {
-                String jsonData = HttpRequest.Get(API.showAllExhibitions+"?page=0");
+                String jsonData = HttpRequest.Get(API.showAllExhibitions+"?page=2");
                 if(jsonData==null)
                 {
                     message.what=0;
@@ -188,7 +197,7 @@ public class FindingFragment extends Fragment implements View.OnClickListener {
         new Thread(()->{
             Message message=new Message();
             try {
-                String jsonData = HttpRequest.Get(API.showAllColllections+"?page=0");
+                String jsonData = HttpRequest.Get(API.showAllColllections+"?page=2");
                 if(jsonData==null)
                 {
                     message.what=0;
@@ -209,14 +218,12 @@ public class FindingFragment extends Fragment implements View.OnClickListener {
                 handler.sendMessage(message);    // 将Message对象发送出去
                 e.printStackTrace();
             }
-
         }).start();
-
         //获取博物馆数据
         new Thread(()->{
             Message message=new Message();
             try {
-                String jsonData = HttpRequest.Get(API.showAllMuseums+"?page=0");
+                String jsonData = HttpRequest.Get(API.showAllMuseums+"?page=2");
                 if(jsonData==null)
                 {
                     message.what=0;

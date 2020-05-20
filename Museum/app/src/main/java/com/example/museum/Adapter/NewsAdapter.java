@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -20,6 +21,7 @@ import com.example.museum.R;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import me.jingbin.library.ByRecyclerView;
 import me.jingbin.library.adapter.BaseByViewHolder;
 import me.jingbin.library.adapter.BaseRecyclerAdapter;
 
@@ -118,12 +120,23 @@ public class NewsAdapter extends BaseRecyclerAdapter<News> {
         super(R.layout.recycleritem_firstnewsview, data);
     }
 
+
+
     @Override
     protected void bindView(BaseByViewHolder<News> holder, News bean, int position) {
 //        holder.setText(R.id.view_bottom, bean);
         News news = getData().get(position);
 
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                News news = getItemData(position);
+                Intent intent = new Intent(holder.itemView.getContext(), NewsActivity.class);
+                intent.putExtra("Url",news.getUrl());
+                holder.itemView.getContext().startActivity(intent);
+            }
+        });
         if(news.getImgurl().equals("") || news.getImgurl()==null)
         {
             Glide.with(holder.itemView)
@@ -145,4 +158,5 @@ public class NewsAdapter extends BaseRecyclerAdapter<News> {
         holder.setText(R.id.news_releasetime,news.getReleasetime().toString());
 
     }
+
 }

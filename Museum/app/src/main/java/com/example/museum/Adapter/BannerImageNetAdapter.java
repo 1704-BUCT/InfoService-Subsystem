@@ -17,6 +17,9 @@ import com.youth.banner.util.BannerUtils;
 import java.util.List;
 import com.example.museum.R;
 
+import me.jingbin.library.adapter.BaseByViewHolder;
+import me.jingbin.library.adapter.BaseRecyclerAdapter;
+
 /*
     轮播图banner组件适配器定义
 * */

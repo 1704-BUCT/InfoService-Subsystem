@@ -5,61 +5,58 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:layout_marginRight="10dp"
-    android:layout_marginLeft="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
     app:cardCornerRadius="4dp">
-
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="130dp">
-
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:orientation="horizontal"
+        android:weightSum="100">
         <ImageView
             android:id="@+id/exhibition_image"
-            android:layout_width="155dp"
+            android:layout_width="0dp"
+            android:layout_weight="40"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:scaleType="centerCrop" />
-
         <androidx.legacy.widget.Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
 
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="0dp"
+            android:layout_weight="54"
             android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
             android:layout_marginBottom="5dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="100">
 
             <TextView
                 android:id="@+id/exhibition_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_height="0dp"
+                android:layout_weight="60"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:paddingRight="15dp"
                 android:text="test"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="20" />
 
             <TextView
                 android:id="@+id/museum_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="20"
                 android:gravity="left"
                 android:text="test"
                 android:textSize="15sp" />

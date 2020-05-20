@@ -8,12 +8,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.museum.API.API;
 import com.example.museum.Adapter.ExhibitionAdapter;
@@ -26,61 +25,70 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.jingbin.library.ByRecyclerView;
+
 /*
  * 搜索展览页面
  * */
 public class ExhibitionsActivity extends AppCompatActivity {
-//    private static final String TAG = "ExhibitionActivity";
     private ExhibitionAdapter adapter;
     private List<Exhibition> museumList = new ArrayList<>();
     private final Context currContext = this;
-    private RecyclerView recyclerView;
-//    private ProgressBar progressBar;
+    private ByRecyclerView recyclerView;
+    private Integer page = 0;
+    private String key = "";
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                adapter.notifyDataSetChanged();
+            if(msg.what == 0){
+                TextView empty = findViewById(R.id.empty);
+                empty.setVisibility(View.VISIBLE);
+                empty.setText("暂无相关内容");
             }
+            else if(msg.what == -1){
+                TextView empty = findViewById(R.id.empty);
+                empty.setVisibility(View.VISIBLE);
+                empty.setText("网络错误，请稍后再试");
+            }
+            adapter.setNewData(museumList);
         }
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exhibition);
+        setContentView(R.layout.activity_exhibitions);
         adapter= new ExhibitionAdapter(museumList);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_exhibition);
+        recyclerView = (ByRecyclerView) findViewById(R.id.recycler_exhibition);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-//                String str = HttpRequest.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + "湖北");
-                String str = HttpRequest.Get(API.showAllExhibitions+"?page=0");
-
-                try {
-//                    JSONArray data = new JSONObject(str).getJSONArray("newslist");
-                    JSONObject jsonObject=new JSONObject(str);
-                    JSONArray data = jsonObject.getJSONArray("content");
-
-                    JSONObject item;
-                    for(int i=0;i<data.length();i++){
-                        item = data.getJSONObject(i);
-//                        museumList.add(new Exhibition(i,item.getString("title"),item.getString("picUrl"),item.getString("source")));
-                        museumList.add(new Exhibition(item.getInt("eid"),item.getString("name"),item.getString("imgurl"),item.getString("mname")));
-                    }
-                    Message message = Message.obtain();
-                    message.what = 1;
-                    handler.sendMessage(message);
-                }catch (JSONException e){
-                    e.printStackTrace();
-                }
+        //设置下拉刷新
+        recyclerView.setOnRefreshListener(() -> {
+            page=0;
+            museumList.clear();
+            adapter.notifyDataSetChanged();
+            if(key.equals("")) {
+                refreshMuseums(API.showAllExhibitions + "?page=0");
+            }
+            else{
+                refreshMuseums(API.museumExhibitions + key  + "?page=0");
             }
         });
-        thread.start();
+        recyclerView.setLoadMoreEnabled(true);
+        recyclerView.setOnLoadMoreListener(() -> {
+            if(key.equals("")) {
+                refreshMuseums(API.showAllExhibitions + "?page=" + page.toString());
+            }
+            else{
+                refreshMuseums(API.museumExhibitions + key + "?page=" + page.toString());
+            }
+//                recyclerView.loadMoreComplete();      // 加载更多完成
+//                recyclerView.loadMoreEnd();           // 没有更多内容了
+//                recyclerView.loadMoreFail();          // 加载更多失败(点击或再次上拉都会再次调用加载更多接口)
+        }, 10);// delayMillis: 延迟多少毫秒调用接口
+
+        refreshMuseums(API.showAllExhibitions+"?page=0");
         ActionBar actionbar = getSupportActionBar();
         // 隐藏标题栏
         if (actionbar != null) {
@@ -88,47 +96,25 @@ public class ExhibitionsActivity extends AppCompatActivity {
         }
         SearchView searchView = (SearchView) findViewById(R.id.search_exhibition);
         searchView.setQueryHint("请输入展览名称");
-        searchView.setIconified(false);         //展开搜索得内容
+        searchView.setIconified(false);        //展开搜索得内容
         searchView.setSubmitButtonEnabled(true);//显示提交按钮
         searchView.onActionViewExpanded();      //当展开无输入内容的时候，没有关闭的图标
         searchView.setIconifiedByDefault(false);//默认为true在框内，设置false则在框外
+        searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                progressBar = findViewById(R.id.progress);
-//                progressBar.setVisibility(View.VISIBLE);
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-//                        String str = Http.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + query);
-                        String str = HttpRequest.Get("http://api.tianapi.com/areanews/index?key=2fe201b4f3328820dd198843070bda77&areaname=" + "河北");
-//                        String str = HttpRequest.Get(API.showAllExhibitions);
-
-                        try {
-                            JSONArray data = new JSONObject(str).getJSONArray("newslist");
-                            JSONObject item;
-                            museumList.clear();
-                            for(int i=0;i<data.length();i++){
-                                item = data.getJSONObject(i);
-                                museumList.add(new Exhibition(i,item.getString("title"),item.getString("picUrl"),item.getString("source")));
-                            }
-                            Message message = Message.obtain();
-                            message.what = 1;
-                            handler.sendMessage(message);
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                thread.start();
-                //提交按钮的点击事件，这里应该是根据query即博物馆名称作为关键字进行查询
-                //此处需要第五小组的api,需要把博物馆的信息存到museum对象中，再作为参数传递给博物馆具体信息页面
+                page = 0;
+                museumList.clear();
+                adapter.notifyDataSetChanged();
+                refreshMuseums(API.findExhibitions+query+"?page=0");
                 searchView.clearFocus();  //可以收起键盘
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                key = newText;
                 return false;
             }
 
@@ -143,5 +129,66 @@ public class ExhibitionsActivity extends AppCompatActivity {
         if (viewById2 != null) {
             viewById2.setBackgroundColor(Color.TRANSPARENT);
         }
+    }
+    private void dealRes(String str){
+        museumList.clear();
+        Message message = Message.obtain();
+        if(str == null){
+            message.what = -1;
+            handler.sendMessage(message);
+            return ;
+        }
+        try {
+            JSONObject jsonObject=new JSONObject(str);
+            JSONArray data = jsonObject.getJSONArray("content");
+            JSONObject item;
+            if(data.length()==0){
+                message.what = 0;
+            }
+            else {
+                for (int i = 0; i < data.length(); i++) {
+                    item = data.getJSONObject(i);
+                    museumList.add(new Exhibition(item.getInt("eid"), item.getString("name"), item.getString("imgurl"), item.getString("mname")));
+                }
+                message.what = 1;
+            }
+            handler.sendMessage(message);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+    void refreshMuseums(String url){
+        new Thread(()->{
+            Message message = new Message();
+            try{
+                String jsonData = HttpRequest.Get(url);
+                //考虑网络请求出错的情况
+                if(jsonData==null)
+                    message.what = -1;
+                else
+                {
+                    JSONObject jsonObject=new JSONObject(jsonData);
+                    int pagenum=jsonObject.getInt("totalPages");
+                    JSONArray Jarray = jsonObject.getJSONArray("content");
+                    if(Jarray.length() == 0){
+                        message.what = 0;
+                    }
+                    JSONObject object;
+                    for (int i = 0; i < Jarray.length(); i++) {
+                        object = Jarray.getJSONObject(i);
+                        museumList.add(new Exhibition(object.getInt("eid"), object.getString("name"), object.getString("imgurl"), object.getString("mname")));
+                    }
+                    if(page>=pagenum)
+                        message.what=-2;
+                    else
+                    {
+                        page++;
+                        message.what = 1;
+                    }
+                }
+                handler.sendMessage(message);    // 将Message对象发送出去
+            }catch(JSONException e){
+                e.printStackTrace();
+            }}).start();
     }
 }

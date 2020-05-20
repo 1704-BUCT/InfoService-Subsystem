@@ -9,4 +9,5 @@
     <color name="textTitle">#000000</color>
     <color name="unselect">#979393</color>
     <color name="select">#FF9800</color>
+    <color name="thingray">#E8E6E6</color>
 </resources>

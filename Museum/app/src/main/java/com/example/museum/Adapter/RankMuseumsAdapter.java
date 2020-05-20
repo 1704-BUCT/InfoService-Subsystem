@@ -38,15 +38,13 @@ public class RankMuseumsAdapter extends BaseRecyclerAdapter<Museum> {
     protected void bindView(BaseByViewHolder<Museum> holder, Museum bean, int position) {
 
         Museum museum = getData().get(position);
-        //        Glide.with(holder.itemView)
-//                .load(museum.getImgurl())
-//                .into(holder.museumImage);
 
 
         if(museum.getImgurl().equals("") || museum.getImgurl()==null)
         {
             Glide.with(holder.itemView)
                     .load(R.drawable.pic_null)
+                    .transform(new RoundedCorners(20))
                     .into((ImageView) holder.getView(R.id.rank_museum_image));
         }
         else
@@ -54,6 +52,7 @@ public class RankMuseumsAdapter extends BaseRecyclerAdapter<Museum> {
             Glide.with(holder.itemView)
                     .load(museum.getImgurl())
                     .error(R.drawable.pic_null)
+                    .transform(new RoundedCorners(20))
                     .into((ImageView) holder.getView(R.id.rank_museum_image));
         }
         holder.setText(R.id.rank_museum_name,museum.getName());

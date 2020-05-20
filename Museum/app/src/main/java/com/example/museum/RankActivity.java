@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.jingbin.library.ByRecyclerView;
+import me.jingbin.library.decoration.SpacesItemDecoration;
 
 /*
 * 排名页面
@@ -53,12 +54,9 @@ public class RankActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             progressBar.setVisibility(View.GONE);
-//            if (msg.what == 1) {
-//                progressBar.setVisibility(View.GONE);
-//                adapter.notifyDataSetChanged();
-//            }
-
             if (msg.what == 1) {
+                TextView textView=findViewById(R.id.rank_error);
+                textView.setVisibility(View.GONE);
                 museumList1=new ArrayList<>(museumList);
                 if(page==1)
                     recyclerView.setRefreshing(false);
@@ -71,7 +69,7 @@ public class RankActivity extends AppCompatActivity {
                 TextView textView=findViewById(R.id.rank_error);
                 //网络异常时
                 progressBar.setVisibility(View.GONE);
-                textView.setVisibility(View.VISIBLE);
+                recyclerView.loadMoreFail();
             }
             else
                 recyclerView.loadMoreEnd();            // 没有更多内容了
@@ -86,8 +84,6 @@ public class RankActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_rankpage);
         layoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(layoutManager);
-
-//        String url = "http://v.juhe.cn/toutiao/index?type=top&key=3f27f65b56ef05ccc3b25e576806f811";
         getRankDatas(API.showMuseumSortByAvgstar+"?page=0");
         adapter = new RankMuseumsAdapter(museumList);
         recyclerView.setAdapter(adapter) ;
@@ -124,21 +120,26 @@ public class RankActivity extends AppCompatActivity {
                         getRankDatas(API.showMuseumSortByAvgenvironstar+"?page="+page.toString());
                         break;
                     case 3:
+                        getRankDatas(API.showMuseumSortByAvgservicestar+"?page="+page.toString());
                         break;
-                    case 4:
-                        break;
+
                 }
 
             }
         }, 10);// delayMillis: 延迟多少毫秒调用接口
+        // 选择2：设置颜色、高度、间距等
+        SpacesItemDecoration itemDecoration = new SpacesItemDecoration(this, SpacesItemDecoration.VERTICAL)
+                .setNoShowDivider(0, 1)
+                // 颜色，分割线间距，左边距(单位dp)，右边距(单位dp)
+                .setParam(R.color.thingray, 5);
 
+        recyclerView.addItemDecoration(itemDecoration);
 
         FilterHeadView filterHeadView = findViewById(R.id.filter);
         TextView textView0=findViewById(R.id.filter_zonghe);
         TextView textView1=findViewById(R.id.filter_cishu);
         TextView textView2=findViewById(R.id.filter_huanjing);
         TextView textView3=findViewById(R.id.filter_fuwu);
-//        TextView textView0=findViewById(R.id.filter_zonghe);
         textView0.setTextColor(getResources().getColor(R.color.select));
         LinearLayout filter_item1=findViewById(R.id.zonghe);
         //按综合排序
@@ -151,7 +152,7 @@ public class RankActivity extends AppCompatActivity {
                 textView1.setTextColor(Color.GRAY);
                 textView2.setTextColor(Color.GRAY);
                 textView3.setTextColor(Color.GRAY);
-//                textView0.setTextColor(getResources().getColor(R.color.select));
+                selected=0;
                 page=0;
                 getRankDatas(API.showMuseumSortByAvgstar+"?page=0");
             }
@@ -164,6 +165,7 @@ public class RankActivity extends AppCompatActivity {
                 filterHeadView.hide();
                 selectText.setText("展览次数");
                 page=0;
+                selected=1;
                 textView1.setTextColor(getResources().getColor(R.color.select));
                 textView0.setTextColor(Color.GRAY);
                 textView2.setTextColor(Color.GRAY);
@@ -182,8 +184,25 @@ public class RankActivity extends AppCompatActivity {
                 textView1.setTextColor(Color.GRAY);
                 textView0.setTextColor(Color.GRAY);
                 textView3.setTextColor(Color.GRAY);
+                selected=2;
                 page=0;
                 getRankDatas(API.showMuseumSortByAvgenvironstar+"?page=0");
+            }
+        });
+        LinearLayout filter_item4=findViewById(R.id.fuwu);
+        //按展览排序
+        filter_item4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterHeadView.hide();
+                selectText.setText("服务");
+                textView3.setTextColor(getResources().getColor(R.color.select));
+                textView1.setTextColor(Color.GRAY);
+                textView2.setTextColor(Color.GRAY);
+                textView0.setTextColor(Color.GRAY);
+                selected=3;
+                page=0;
+                getRankDatas(API.showMuseumSortByAvgservicestar+"?page=0");
             }
         });
         //点击上方返回键返回到上个页面
@@ -229,8 +248,8 @@ public class RankActivity extends AppCompatActivity {
                     }
                 }
                 handler.sendMessage(message);    // 将Message对象发送出去
-            }catch(JSONException e){
-                message.what=0;
+            } catch(JSONException e){
+                message.what=-1;
                 handler.sendMessage(message);    // 将Message对象发送出去
                 e.printStackTrace();
             }}).start();

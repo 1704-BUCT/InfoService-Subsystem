@@ -84,6 +84,8 @@ public class EducationActivity extends AppCompatActivity {
         new Thread(()->{
             Message message= new Message();
             String str=HttpRequest.Get(API.findEducationsById+id.toString());
+//            System.out.println(str);
+//            System.out.println(API.findEducationsById+id.toString());
             if(str==null)
             {
                 message.what=0;
@@ -91,19 +93,16 @@ public class EducationActivity extends AppCompatActivity {
             else
             {
                 try {
-                    JSONObject jsonObject=new JSONObject(str);
-                    JSONArray jsonArray = jsonObject.getJSONArray("content");
+
+                    JSONObject jsonObject= new JSONObject(str);
                     educationActivity=new com.example.museum.Datas.EducationActivity();
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-                        JSONObject item=jsonArray.getJSONObject(i);
-                        educationActivity.setId(item.getInt("eid"));
-                        educationActivity.setName(item.getString("name"));
-                        educationActivity.setImgurl(item.getString("imgurl"));
-                        educationActivity.setTime(item.getString("time"));
-                        educationActivity.setMname(item.getString("mname"));
-                        educationActivity.setIntroduction(item.getString("introduction"));
-                    }
+                    educationActivity.setId(jsonObject.getInt("eid"));
+                    educationActivity.setName(jsonObject.getString("name"));
+                    educationActivity.setImgurl(jsonObject.getString("imgurl"));
+                    educationActivity.setTime(jsonObject.getString("time"));
+                    educationActivity.setMname(jsonObject.getString("mname"));
+                    educationActivity.setIntroduction(jsonObject.getString("introduction"));
+
                     message.what=1;
                 } catch (JSONException e) {
                     message.what=0;
