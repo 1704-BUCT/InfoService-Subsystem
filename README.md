@@ -23,17 +23,27 @@ It is built for users to browse museum datas more conveniencely.
 
 #### 1.4 文件目录结构
 
-com.example.museum
-├── Adapter            // recyclerView等组件需要的适配器
-├── Components       // 自定义的一些组件 
-├── API                   // 后台提供的API接口常量作为公共变量
-├── Datas                // 需要的一些实体类
-├── SQLite               // 历史搜索需要的工具类
-├── UI                     // 界面渲染
-│       └── finding                   // 发现页面
-│       └── first                        //  精选（新闻）页面
-│       └── guide                      // 导航页
-│       └── my                         // 我的页面
+```
+main
+├── AndroidManifest.xml               各个Activity的配置文件
+├── java
+│   └── com
+│       └── example
+│           └── museum
+│                  ├── Adapter           存放 recyclerView需要的适配器定义
+│                  ├── Components     存放自定义的一些组件 
+│                  ├── Entity                   存放实体类
+│                  ├── MainActivity.java   程序入口，设置底部导航栏
+│                  ├── NewsActivity.java  显示新闻具体信息的页面      
+│                  ├── UI                       
+│                         ├── finding        发现页面的一些类定义
+│                         ├── first             精选（新闻）页面
+│                         ├── guide          导览页面
+│                         └── my              我的页面
+│                 └── Utils                  存放需要的一些工具类
+└── res    存放一些资源文件，如图片，字体等
+
+```
 
 
 ### 2、开发过程
